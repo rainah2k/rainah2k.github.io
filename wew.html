@@ -77,13 +77,22 @@
       border-radius: 10px;
       font-size: 1em;
       cursor: pointer;
-      transition: background 0.2s ease;
+      transition: background 0.2s ease, transform 0.1s ease;
     }
     .answers button:hover {
       background: #dcdcdc;
+      transform: scale(1.02);
+    }
+    .answers button.correct {
+      background-color: #81c784 !important;
+      color: white;
+    }
+    .answers button.wrong {
+      background-color: #e57373 !important;
+      color: white;
     }
 
-    .next-btn, .back-btn {
+    .back-btn {
       margin-top: 20px;
       padding: 10px 20px;
       border: none;
@@ -94,7 +103,7 @@
       color: white;
       transition: 0.3s ease;
     }
-    .next-btn:hover, .back-btn:hover {
+    .back-btn:hover {
       background: #ec407a;
     }
 
@@ -171,14 +180,13 @@
     </button>
   </div>
 
-  <button class="back-btn" style="margin-top:30px;" onclick="goMain()">Back</button>
+  <button class="back-btn" style="margin-top:30px;" onclick="goMain()">⬅️ Back</button>
 
   <div class="quiz-container" id="quizContainer">
     <h2 id="gameTitle"></h2>
     <div class="question" id="question"></div>
     <div class="answers" id="answers"></div>
-    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next</button>
-    <button class="back-btn" onclick="showMenu()">Back</button>
+    <button class="back-btn" onclick="showMenu()">⬅️ Back to Menu</button>
   </div>
 
   <!-- Modal -->
@@ -230,6 +238,7 @@
     let currentGame = null;
     let currentQuestion = 0;
     let score = 0;
+    let acceptingAnswers = true;
 
     function startGame(color) {
       currentGame = games[color];
@@ -252,15 +261,30 @@
       q.a.forEach((ans, i) => {
         const btn = document.createElement("button");
         btn.innerText = ans;
-        btn.onclick = () => selectAnswer(i);
+        btn.onclick = () => selectAnswer(btn, i);
         answersDiv.appendChild(btn);
       });
+      acceptingAnswers = true;
     }
 
-    function selectAnswer(index) {
+    function selectAnswer(button, index) {
+      if (!acceptingAnswers) return;
+      acceptingAnswers = false;
+
       const q = currentGame.questions[currentQuestion];
-      if (index === q.correct) score++;
-      nextQuestion();
+      const buttons = document.querySelectorAll(".answers button");
+      
+      if (index === q.correct) {
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("wrong");
+        buttons[q.correct].classList.add("correct");
+      }
+
+      setTimeout(() => {
+        nextQuestion();
+      }, 1000);
     }
 
     function nextQuestion() {
