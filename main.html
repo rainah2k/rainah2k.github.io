@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rainah's Portfolio</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff4b5c, #1a1a1a);
+      color: white;
+    }
+
+    /* Header & Navigation */
+    header {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #ffebf0;
+    }
+
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #ff4b5c;
+    }
+
+    /* General Section Styling */
+    section {
+      padding: 4rem 2rem;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #ffebf0;
+      text-align: center;
+    }
+
+    section p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      text-align: center;
+      opacity: 0.95;
+    }
+    
+    /* General Card Styling */
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      margin-bottom: 0.5rem;
+      color: #ffebf0;
+    }
+
+    /* Large Images Styling */
+     img[alt="About Me Picture"] {
+        max-width: 1150px;
+        width: 100%;
+        height: auto;
+        border-radius: 15px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+     }
+
+    /* My Shots Section */
+    .shots-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      justify-items: center;
+    }
+
+    .shot-card {
+      width: 200px;
+      height: 300px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .shot-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 1s;
+    }
+
+    .shot-card.flipped .shot-inner {
+      transform: rotateY(180deg);
+    }
+
+    .shot-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .shot-face img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .shot-back {
+      transform: rotateY(180deg);
+    }
+
+    /* Modern Society Section */
+    .modern-wrapper {
+      text-align: center;
+    }
+
+    .modern-title {
+      color: #ffebf0;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .modern-boxes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .modern-card {
+      background: black;
+      color: #fff;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+      transition: background 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .modern-card:hover,
+    .modern-card:active {
+      background: #ff4b5c;
+      transform: translateY(-5px);
+    }
+
+    .modern-card h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    /* --- UPDATED PHILOSOPHER STYLES --- */
+    .philosopher-gallery {
+      position: relative;
+      max-width: 1100px; /* UPDATED: Made gallery wider to match section width */
+      margin: auto;
+      overflow: hidden;
+    }
+
+    .philosopher-gallery .p-slide {
+      display: none;
+    }
+
+    .philosopher-gallery .p-slide img {
+      width: 100%;
+      height: auto;
+      max-height: 600px; /* UPDATED: Taller max height on desktop */
+      object-fit: contain;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* ADDED: Deeper shadow effect */
+      transition: transform 0.4s ease, box-shadow 0.4s ease; /* ADDED: Smooth transition for hover */
+    }
+    
+    /* ADDED: Hover effect - scale and glow */
+    .philosopher-gallery:hover .p-slide img {
+        transform: scale(1.02);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 75, 92, 0.4);
+    }
+
+    .philosopher-gallery .p-prev,
+    .philosopher-gallery .p-next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 1rem;
+      color: white;
+      font-weight: bold;
+      font-size: 2rem;
+      border-radius: 50%;
+      user-select: none;
+      transition: 0.3s;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 5; /* Ensure arrows are on top */
+    }
+
+    .philosopher-gallery .p-next { right: 25px; }
+    .philosopher-gallery .p-prev { left: 25px; }
+    .philosopher-gallery .p-prev:hover, 
+    .philosopher-gallery .p-next:hover { background: rgba(0, 0, 0, 0.8); }
+
+
+    /* Philosophical Reflections Section */
+    .reflection-wrapper {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .reflection-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .reflection-card {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .reflection-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .reflection-card h3 {
+      margin-bottom: 0.8rem;
+      color: #ffebf0;
+    }
+
+    /* Self-Construction Panel Buttons & Modals */
+    .panel-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .panel-btn {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      cursor: pointer;
+      height: 150px;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.3s ease;
+    }
+
+    .panel-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .panel-btn span {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 0.5rem;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .panel-btn:hover span {
+      opacity: 1;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 15px;
+      max-width: 600px;
+      width: 90%;
+      color: white;
+      text-align: center;
+    }
+
+    .close-btn {
+      margin-top: 1rem;
+      background: #ff4b5c;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .close-btn:hover {
+      background: #ff1e38;
+    }
+
+    /* Gallery Slideshow */
+    .slideshow-container {
+      position: relative;
+      max-width: 800px;
+      margin: auto;
+      overflow: hidden;
+      border-radius: 15px;
+    }
+
+    .slide {
+      display: none;
+      text-align: center;
+    }
+
+    .slide img {
+      width: 100%;
+      height: auto;
+      max-height: 500px;
+      object-fit: contain;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+      transition: transform 0.4s ease;
+    }
+
+    .slide:hover img {
+      transform: scale(1.02);
+    }
+
+    .overlay {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      width: 80%;
+      text-align: center;
+    }
+
+    .slide:hover .overlay {
+      opacity: 1;
+    }
+
+    .prev,
+    .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 1rem;
+      color: white;
+      font-weight: bold;
+      font-size: 2rem;
+      border-radius: 50%;
+      user-select: none;
+      transition: 0.3s;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .next { right: 10px; }
+    .prev { left: 10px; }
+    .prev:hover, .next:hover { background: rgba(0, 0, 0, 0.8); }
+
+    /* Reflection Quiz Section */
+    .quiz-box {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .quiz-options button {
+      background: #ff4b5c;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .quiz-options button:hover {
+      background: #ff1e38;
+      transform: scale(1.05);
+    }
+
+    #quiz-feedback {
+      font-weight: bold;
+      margin-top: 1rem;
+      min-height: 1.2em;
+    }
+
+    /* Back Button */
+    .btn-back {
+      display: block;
+      margin: 3rem auto;
+      background: #ffffff;
+      color: #ff4b5c;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-back:hover {
+      background: #ff4b5c;
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(255, 75, 92, 0.5);
+    }
+
+    /* Footer */
+    footer {
+      background: #ff4b5c;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+
+    footer .highlight {
+      font-weight: bold;
+    }
+
+    /* ------------------------- */
+    /* Responsive Media Queries */
+    /* ------------------------- */
+    @media (max-width: 768px) {
+      /* General Adjustments */
+      section {
+        padding: 2rem 1rem;
+      }
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.5rem; }
+
+      /* Header & Navigation */
+      header {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+      }
+      nav {
+        margin-top: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      nav a {
+        margin: 5px 10px;
+        font-size: 0.9rem;
+      }
+
+      /* My Shots Section */
+      .shots-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .shot-card {
+        width: 100%;
+        height: 250px; /* Adjust height for smaller grid */
+      }
+
+      /* Modern Society Section */
+      .modern-boxes {
+        grid-template-columns: 1fr;
+      }
+      .modern-card {
+        padding: 1.5rem;
+      }
+
+      /* Philosopher Gallery */
+      .philosopher-gallery .p-slide img {
+        max-height: 350px; /* Shorter height on mobile */
+      }
+      .philosopher-gallery .p-prev, 
+      .philosopher-gallery .p-next {
+        font-size: 1.5rem;
+        padding: 0.8rem;
+        right: 10px;
+        left: 10px;
+      }
+
+
+      /* Reflections Section */
+      .reflection-container {
+        grid-template-columns: 1fr;
+      }
+      #reflections {
+        padding: 3rem 1rem;
+      }
+      .reflection-wrapper {
+        padding: 1.5rem;
+      }
+
+      /* Panel Buttons */
+      .panel-buttons {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      /* Gallery Slideshow */
+      .slide img {
+        max-height: 300px;
+      }
+      .prev, .next {
+        font-size: 1.5rem;
+        padding: 0.8rem;
+      }
+      .overlay {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>My Portfolio</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#modern-society">Modern Society</a>
+      <a href="#shots">Shots</a>
+      <a href="#philosopher-showcase">Philosophers</a>
+      <a href="#reflections">Reflections</a>
+      <a href="#gallery">Gallery</a>
+    </nav>
+  </header>
+
+  <div style="text-align:center; padding: 2rem 1rem;">
+    <h2>My Portfolio</h2>
+    <img src="itona.png" alt="About Me Picture">
+  </div>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <div style="text-align:center;">
+      <img src="abtme.png" alt="About Me Picture">
+    </div>
+  </section>
+
+  <section id="shots">
+    <h2 style="font-family:Poppins, sans-serif; margin-bottom: 2rem;">My Shots</h2>
+    <div class="shots-container">
+      <div class="shot-card" onclick="this.classList.toggle('flipped')">
+        <div class="shot-inner">
+          <div class="shot-face shot-front"><img src="1.png" alt="Front 1"></div>
+          <div class="shot-face shot-back"><img src="2.png" alt="Back"></div>
+        </div>
+      </div>
+      <div class="shot-card" onclick="this.classList.toggle('flipped')">
+        <div class="shot-inner">
+          <div class="shot-face shot-front"><img src="1.png" alt="Front 2"></div>
+          <div class="shot-face shot-back"><img src="3.png" alt="Back"></div>
+        </div>
+      </div>
+      <div class="shot-card" onclick="this.classList.toggle('flipped')">
+        <div class="shot-inner">
+          <div class="shot-face shot-front"><img src="1.png" alt="Front 3"></div>
+          <div class="shot-face shot-back"><img src="4.png" alt="Back"></div>
+        </div>
+      </div>
+      <div class="shot-card" onclick="this.classList.toggle('flipped')">
+        <div class="shot-inner">
+          <div class="shot-face shot-front"><img src="1.png" alt="Front 4"></div>
+          <div class="shot-face shot-back"><img src="5.png" alt="Back"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="modern-society">
+    <div class="modern-wrapper">
+      <h2 class="modern-title">Myself in Modern Society</h2>
+      <div class="modern-boxes">
+        <div class="modern-card">
+          <h3>Space to Explore</h3>
+          <p>Living in today’s world gives me so much freedom to figure out who I am. Modern society opens doors, offering endless ways to express myself and try new things.</p>
+        </div>
+        <div class="modern-card">
+          <h3>The Struggle with Authenticity</h3>
+          <p>But with technology and social media, it sometimes feels like I’m performing instead of just being real. I can show my individuality, but it also makes me question—am I really showing me, or just the version people expect?</p>
+        </div>
+        <div class="modern-card">
+          <h3>Finding Balance</h3>
+          <p>For me, the real challenge is balance. I want to take advantage of what modernization offers, but at the same time, I need to stay true to who I really am.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section id="philosopher-showcase">
+    <h2>Philosophers</h2>
+    <div class="philosopher-gallery">
+        <div class="p-slide"><img src="niet.png" alt="Nietzsche"></div>
+        <div class="p-slide"><img src="mead.png" alt="Mead"></div>
+        <div class="p-slide"><img src="cooley.png" alt="Cooley"></div>
+        <div class="p-slide"><img src="views.png" alt="Postmodern Views"></div>
+        
+        <a class="p-prev" onclick="pPlusSlides(-1)">&#10094;</a>
+        <a class="p-next" onclick="pPlusSlides(1)">&#10095;</a>
+    </div>
+  </section>
+
+  <section id="reflections">
+    <div class="reflection-wrapper">
+      <h2>Philosophical Reflections of Myself</h2>
+      <div class="reflection-container">
+        <div class="reflection-card">
+          <h3>Nietzsche</h3>
+          <p>His idea reminds me that I am never a finished product. Who I am today is not final; I can always change, improve, and recreate myself depending on how I want to live.</p>
+        </div>
+        <div class="reflection-card">
+          <h3>Mead</h3>
+          <p>I see myself clearly in his theory. My identity grows from the people I interact with daily—my family, friends, classmates, and teachers. I am shaped not only by who I think I am, but also by the social roles I take on.</p>
+        </div>
+        <div class="reflection-card">
+          <h3>Cooley</h3>
+          <p>The “looking-glass self” speaks to me because I know I often look at myself through other people’s eyes. Whether it’s praise or criticism, it affects how I view myself. Sometimes it helps, sometimes it holds me back.</p>
+        </div>
+        <div class="reflection-card">
+          <h3>Postmodern Views</h3>
+          <p>I can’t deny this. My “digital self” on social media is part of who I am, but not all of me. Online, I can choose what to show and what to hide, but offline is where the real me exists—flawed, growing, and learning.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Self-Construction</h2>
+    <div class="panel-buttons">
+      <div class="panel-btn" style="background-image:url('fam.jpg')" onclick="openModal('modal1')"><span>Family</span></div>
+      <div class="panel-btn" style="background-image:url('school.jpg')" onclick="openModal('modal2')"><span>School</span></div>
+      <div class="panel-btn" style="background-image:url('comm.jpg')" onclick="openModal('modal3')"><span>Community</span></div>
+      <div class="panel-btn" style="background-image:url('culture.jpg')" onclick="openModal('modal4')"><span>Cultures</span></div>
+    </div>
+  </section>
+
+  <section id="reflection">
+    <h2>My Reflection</h2>
+    <img src="reflection.png" alt="About Me Picture">
+  </section>
+
+  <div style="text-align: center; padding: 1rem;">
+    <img src="deend.jpg" alt="About Me Picture">
+  </div>
+
+  <section id="gallery">
+    <h2>Rai's Gallery</h2>
+    <div class="slideshow-container">
+        <div class="slide fade"><img src="gallery14.jpg" alt="Gallery 14"><div class="overlay">My graduation piccccccccccccc</div></div>
+        <div class="slide fade"><img src="gallery1.jpg" alt="Gallery 1"><div class="overlay">My friends from Quezon City</div></div>
+        <div class="slide fade"><img src="gallery2.jpg" alt="Gallery 2"><div class="overlay">My friends from Alaminos, we were at prom when I took this photo</div></div>
+        <div class="slide fade"><img src="gallery3.jpg" alt="Gallery 3"><div class="overlay">Graduation&lt;3</div></div>
+        <div class="slide fade"><img src="gallery4.jpg" alt="Gallery 4"><div class="overlay">A picture of my mother with my little brother! I miss them.</div></div>
+        <div class="slide fade"><img src="gallery5.jpg" alt="Gallery 5"><div class="overlay">Class picture!</div></div>
+        <div class="slide fade"><img src="gallery6.jpg" alt="Gallery 6"><div class="overlay">With my mother and grandma&lt;3</div></div>
+        <div class="slide fade"><img src="gallery7.jpg" alt="Gallery 7"><div class="overlay">My gay friends who come with me when I'm enrolling here in LSPU</div></div>
+        <div class="slide fade"><img src="gallery8.jpg" alt="Gallery 8"><div class="overlay">My 1C girliessss</div></div>
+        <div class="slide fade"><img src="gallery9.jpg" alt="Gallery 9"><div class="overlay">Caseoh! My fav streamer&lt;3</div></div>
+        <div class="slide fade"><img src="gallery10.jpg" alt="Gallery 10"><div class="overlay">Zenooooooo</div></div>
+        <div class="slide fade"><img src="gallery11.jpg" alt="Gallery 11"><div class="overlay">My two cats:&lt; Only one did survived tho.</div></div>
+        <div class="slide fade"><img src="meh.jpg" alt="Gallery 12"><div class="overlay">I was bored.</div></div>
+        <div class="slide fade"><img src="mother.jpg" alt="Gallery 13"><div class="overlay">My mother, she's cooking something here this is my little brother's 1st birthday</div></div>
+        <div class="slide fade"><img src="swimming.jpg" alt="Gallery 15"><div class="overlay">Swimming with classmates!</div></div>
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+  </section>
+
+  <section id="quiz-section">
+    <div class="quiz-box">
+        <h2>Quick Reflection Quiz</h2>
+        <p style="margin-bottom:1.5rem;">hehe</p>
+        <h3>What do I value most in modern society?</h3>
+        <div class="quiz-options">
+            <button onclick="checkAnswer(this, false)">Fame & Popularity</button>
+            <button onclick="checkAnswer(this, true)">Authenticity & Balance</button>
+            <button onclick="checkAnswer(this, false)">Money & Possessions</button>
+        </div>
+        <p id="quiz-feedback"></p>
+    </div>
+  </section>
+  
+   <button class="btn-back" onclick="location.href='wew.html'">Click for more games!</button>
+  <button class="btn-back" onclick="location.href='index.html'">Back to Frontpage</button>
+
+  <footer>
+    <p>&copy; 2025 <span class="highlight">Rainah</span>. All rights reserved.</p>
+  </footer>
+
+  <div id="modal1" class="modal"><div class="modal-content"><h2>Family</h2><p>I've always been super close with my family. They're basically my backbone and the reason I am who I am today. They've taught me so much—from how to treat people with kindness to just being a good person. Even when I'm out with friends or on my own, I can feel their lessons sticking with me, like a compass always pointing me in the right direction.</p><button class="close-btn" onclick="closeModal('modal1')">Close</button></div></div>
+  <div id="modal2" class="modal"><div class="modal-content"><h2>School</h2><p>School has been so much more than just a place to learn. It's where I found my voice. I remember being a nervous freshman, but through different classes and activities, I started to believe in myself and found out I was a lot stronger than I thought. The friendships I've made here are honestly some of the best things that have happened to me.</p><button class="close-btn" onclick="closeModal('modal2')">Close</button></div></div>
+  <div id="modal3" class="modal"><div class="modal-content"><h2>Community</h2><p>Being part of my community has been a huge eye-opener. It's easy to get caught up in your own world, but volunteering and getting involved showed me that we're all connected. It gave me a sense of purpose and taught me to look out for others, not just myself. It’s like being part of a big, supportive team.</p><button class="close-btn" onclick="closeModal('modal3')">Close</button></div></div>
+  <div id="modal4" class="modal"><div class="modal-content"><h2>Culture</h2><p>My culture is a massive part of my identity. It's the thing that keeps me grounded and reminds me of where I come from. It’s like a thread that connects me to my roots, no matter how much the world around me changes. It’s what helps me see things from a unique perspective and stay true to myself.</p><button class="close-btn" onclick="closeModal('modal4')">Close</button></div></div>
+
+  <script>
+    // --- NEW PHILOSOPHER SCRIPT ---
+    let pSlideIndex = 1;
+    pShowSlides(pSlideIndex);
+
+    function pPlusSlides(n) {
+      pShowSlides(pSlideIndex += n);
+    }
+
+    function pShowSlides(n) {
+      let i;
+      let slides = document.querySelectorAll(".philosopher-gallery .p-slide");
+      if (n > slides.length) {pSlideIndex = 1}    
+      if (n < 1) {pSlideIndex = slides.length}
+      for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";  
+      }
+      slides[pSlideIndex-1].style.display = "block";  
+    }
+
+
+    // Gallery Slideshow
+    let slideIndex = 1;
+    showSlides(slideIndex);
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+    function showSlides(n) {
+        let i;
+        let gallerySlides = document.querySelectorAll("#gallery .slide");
+        if (n > gallerySlides.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = gallerySlides.length }
+        for (i = 0; i < gallerySlides.length; i++) {
+            gallerySlides[i].style.display = "none";
+        }
+        gallerySlides[slideIndex - 1].style.display = "block";
+    }
+
+    // Quiz Function
+    function checkAnswer(button, correct) {
+        let feedback = document.getElementById("quiz-feedback");
+        if (correct) {
+            feedback.textContent = "✅ Correct! I value authenticity and balance most.";
+            feedback.style.color = "#00ff88";
+        } else {
+            feedback.textContent = "❌ Not quite! Did you even read this? :<";
+            feedback.style.color = "#ff4b5c";
+        }
+    }
+
+    // Modal Functions
+    function openModal(id) { document.getElementById(id).style.display = "flex"; }
+    function closeModal(id) { document.getElementById(id).style.display = "none"; }
+  </script>
+</body>
+</html>

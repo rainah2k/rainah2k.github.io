@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Annoying Quiz Games</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #ffb6c1, #ffe082);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 20px;
+      text-align: center;
+      transition: background 0.5s ease;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin: 10px 0 30px;
+    }
+
+    .game-selection {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .game-btn {
+      border: none;
+      background: none;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .game-btn:hover {
+      transform: scale(1.05);
+    }
+    .game-btn img {
+      width: 220px;
+      height: 220px;
+      border-radius: 15px;
+      object-fit: cover;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+
+    .quiz-container {
+      display: none;
+      max-width: 500px;
+      width: 100%;
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .question {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+
+    .answers button {
+      width: 100%;
+      background: #eee;
+      border: none;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .answers button:hover {
+      background: #dcdcdc;
+    }
+
+    .next-btn, .back-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      background: #f48fb1;
+      color: white;
+      transition: 0.3s ease;
+    }
+    .next-btn:hover, .back-btn:hover {
+      background: #ec407a;
+    }
+
+    /* Modal popup */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .modal-content h2 {
+      margin-bottom: 15px;
+    }
+
+    .modal-content button {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      background: #f48fb1;
+      color: white;
+      transition: 0.3s ease;
+    }
+    .modal-content button:hover {
+      background: #ec407a;
+    }
+
+    @media (max-width: 600px) {
+      .game-btn img {
+        width: 150px;
+        height: 150px;
+      }
+      .quiz-container {
+        padding: 15px;
+      }
+      .question {
+        font-size: 1em;
+      }
+      .answers button {
+        font-size: 0.9em;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 id="mainTitle">🎮 Choose Your Annoying Quiz</h1>
+
+  <div class="game-selection" id="menu">
+    <button class="game-btn" onclick="startGame('red')">
+      <img src="red.jpg" alt="Red Game">
+    </button>
+    <button class="game-btn" onclick="startGame('purple')">
+      <img src="purple.jpg" alt="Purple Game">
+    </button>
+    <button class="game-btn" onclick="startGame('yellow')">
+      <img src="yellow.jpg" alt="Yellow Game">
+    </button>
+  </div>
+
+  <button class="back-btn" style="margin-top:30px;" onclick="goMain()">Back</button>
+
+  <div class="quiz-container" id="quizContainer">
+    <h2 id="gameTitle"></h2>
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next</button>
+    <button class="back-btn" onclick="showMenu()">Back</button>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="resultModal">
+    <div class="modal-content">
+      <h2 id="resultText"></h2>
+      <button onclick="retryGame()">🔁 Try Again</button>
+      <button onclick="goMain()">🏠 Back to Main</button>
+    </div>
+  </div>
+
+  <script>
+    const games = {
+      red: {
+        title: "🔥 The Obvious-but-Not-So-Obvious Quiz",
+        color: "#ff5252",
+        questions: [
+          { q: "What color is an orange?", a: ["Apple", "Orange", "Circle"], correct: 1 },
+          { q: "How many months have 28 days?", a: ["One", "Twelve", "February only"], correct: 1 },
+          { q: "What do cows drink?", a: ["Milk", "Water", "Grass"], correct: 1 },
+          { q: "What gets wetter the more it dries?", a: ["Sponge", "Towel", "Rain"], correct: 1 },
+          { q: "What’s heavier — a kilo of feathers or bricks?", a: ["Feathers", "Bricks", "Same weight"], correct: 2 }
+        ]
+      },
+      purple: {
+        title: "💜 Brain Malfunction Challenge",
+        color: "#9c27b0",
+        questions: [
+          { q: "If you throw a red stone into the sea, what happens?", a: ["It turns purple", "It gets wet", "It floats"], correct: 1 },
+          { q: "Spell 'silk' 5 times. What do cows drink?", a: ["Milk", "Water", "Coke"], correct: 1 },
+          { q: "Plane crashes on border — where do you bury survivors?", a: ["US", "Canada", "You don’t bury survivors"], correct: 2 },
+          { q: "How many animals did Moses take on the ark?", a: ["Two", "None", "One"], correct: 1 },
+          { q: "Which is correct: yolk is white or yolk are white?", a: ["Is white", "Are white", "Neither — yolks are yellow"], correct: 2 }
+        ]
+      },
+      yellow: {
+        title: "💛 Totally Useless Trivia",
+        color: "#fdd835",
+        questions: [
+          { q: "What do you call a fly with no wings?", a: ["A walk", "A crawl", "Sad"], correct: 0 },
+          { q: "What comes down but never goes up?", a: ["Rain", "Gravity", "Me after stairs"], correct: 0 },
+          { q: "If you pass 2nd place, what are you now?", a: ["1st", "2nd", "3rd"], correct: 1 },
+          { q: "What word is spelled incorrectly in every dictionary?", a: ["Incorrectly", "Wrong", "Mistake"], correct: 0 },
+          { q: "Why did the chicken cross the playground?", a: ["To get to the other side", "To get to the slide", "To escape"], correct: 1 }
+        ]
+      }
+    };
+
+    let currentGame = null;
+    let currentQuestion = 0;
+    let score = 0;
+
+    function startGame(color) {
+      currentGame = games[color];
+      document.body.style.background = currentGame.color;
+      document.getElementById("mainTitle").style.display = "none";
+      document.getElementById("menu").style.display = "none";
+      document.querySelector("button.back-btn").style.display = "none";
+      document.getElementById("quizContainer").style.display = "block";
+      document.getElementById("gameTitle").innerText = currentGame.title;
+      currentQuestion = 0;
+      score = 0;
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = currentGame.questions[currentQuestion];
+      document.getElementById("question").innerText = q.q;
+      const answersDiv = document.getElementById("answers");
+      answersDiv.innerHTML = "";
+      q.a.forEach((ans, i) => {
+        const btn = document.createElement("button");
+        btn.innerText = ans;
+        btn.onclick = () => selectAnswer(i);
+        answersDiv.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(index) {
+      const q = currentGame.questions[currentQuestion];
+      if (index === q.correct) score++;
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < currentGame.questions.length) {
+        showQuestion();
+      } else {
+        document.getElementById("resultText").innerText =
+          `🎉 Done! You got ${score}/${currentGame.questions.length} correct.`;
+        document.getElementById("resultModal").style.display = "flex";
+      }
+    }
+
+    function retryGame() {
+      document.getElementById("resultModal").style.display = "none";
+      currentQuestion = 0;
+      score = 0;
+      showQuestion();
+    }
+
+    function showMenu() {
+      document.getElementById("quizContainer").style.display = "none";
+      document.getElementById("menu").style.display = "flex";
+      document.getElementById("mainTitle").style.display = "block";
+      document.querySelector("button.back-btn").style.display = "block";
+      document.body.style.background = "linear-gradient(135deg, #ffb6c1, #ffe082)";
+    }
+
+    function goMain() {
+      window.location.href = "main.html";
+    }
+  </script>
+</body>
+</html>
