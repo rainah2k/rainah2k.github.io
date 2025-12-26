@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pink Aesthetic Piano Challenge</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ffd1dc, #ffdde1);
+            font-family: Arial, sans-serif;
+        }
+        #score, #timer {
+            font-size: 24px;
+            color: #ff91a4;
+            margin-bottom: 10px;
+        }
+        #prompt {
+            font-size: 20px;
+            color: #ff91a4;
+            margin-bottom: 10px;
+        }
+        .piano-container {
+            display: flex;
+            background: #ffc0cb;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            gap: 3px;
+        }
+        .key {
+            width: 80px;
+            height: 300px;
+            border: 2px solid #ff91a4;
+            border-radius: 5px;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s, background-color 0.2s;
+        }
+        .key:active, .key.glow {
+            background-color: #ff91a4;
+            transform: scale(0.9); /* Shrink effect */
+        }
+        /* Dialog Message */
+        #dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 2px solid #ff91a4;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+            z-index: 1000;
+        }
+        #dialog img {
+            width: 150px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        #dialog h2 {
+            color: #ff91a4;
+            margin: 0;
+        }
+        #dialog button {
+            background: #ff91a4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            margin: 5px;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        }
+            /* Back Button */
+            .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ff5e62;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .back-button:hover {
+            background: #ff3c41;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="location.href='doremi.html'">Back</button>
+    <div id="score">Score: 0</div>
+    <div id="timer">Time Left: 10</div>
+    <div id="prompt">Memorize the melody!</div>
+
+    <div class="piano-container">
+        <div class="key" onclick="pressKey('do')" style="background-image: url('do.png');" id="do"></div>
+        <div class="key" onclick="pressKey('re')" style="background-image: url('re.png');" id="re"></div>
+        <div class="key" onclick="pressKey('mi')" style="background-image: url('mi.png');" id="mi"></div>
+        <div class="key" onclick="pressKey('fa')" style="background-image: url('fa.png');" id="fa"></div>
+        <div class="key" onclick="pressKey('sol')" style="background-image: url('sol.png');" id="sol"></div>
+        <div class="key" onclick="pressKey('la')" style="background-image: url('la.png');" id="la"></div>
+        <div class="key" onclick="pressKey('ti')" style="background-image: url('ti.png');" id="ti"></div>
+        <div class="key" onclick="pressKey('doo')" style="background-image: url('doo.png');" id="doo"></div>
+    </div>
+
+    <!-- Dialog Box -->
+    <div id="dialog">
+        <img id="dialogImage" src="" alt="Result">
+        <h2 id="dialogMessage"></h2>
+        <button onclick="restartGame()">Play Again</button>
+        <button onclick="window.location.href='musicgame.html'">Back</button>
+    </div>
+
+    <script>
+        const notes = ['do', 're', 'mi', 'fa', 'sol', 'la', 'ti', 'doo'];
+        let melody = [];
+        let playerInput = [];
+        let score = 0;
+        let timer;
+        let timeLeft = 10;
+
+        function getRandomMelody() {
+            const length = 3 + Math.min(Math.floor(score / 2), 5);
+            const newMelody = [];
+            for (let i = 0; i < length; i++) {
+                newMelody.push(notes[Math.floor(Math.random() * notes.length)]);
+            }
+            return newMelody;
+        }
+
+        function updatePrompt() {
+            melody = getRandomMelody();
+            playerInput = [];
+            playMelody();
+            resetTimer();
+        }
+
+        function playMelody() {
+            let delay = 0;
+            for (const note of melody) {
+                setTimeout(() => {
+                    const audio = new Audio(note + '.mp3');
+                    audio.play();
+                    animateKeyPress(note);
+                }, delay);
+                delay += 500;
+            }
+        }
+
+        function animateKeyPress(note) {
+            const key = document.getElementById(note);
+            if (key) {
+                key.classList.add('glow');
+                setTimeout(() => key.classList.remove('glow'), 300);
+            }
+        }
+
+        function pressKey(note) {
+            const audio = new Audio(note + '.mp3');
+            audio.play();
+            animateKeyPress(note);
+            playerInput.push(note);
+
+            if (playerInput.length === melody.length) {
+                if (JSON.stringify(playerInput) === JSON.stringify(melody)) {
+                    score++;
+                    document.getElementById('score').textContent = 'Score: ' + score;
+                    setTimeout(updatePrompt, 1000);
+                } else {
+                    showDialog('Incorrect', 'aw.jpg');
+                }
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            timeLeft = 10;
+            document.getElementById('timer').textContent = 'Time Left: ' + timeLeft;
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = 'Time Left: ' + timeLeft;
+                if (timeLeft <= 0) showDialog('Incorrect', 'aw.jpg');
+            }, 1000);
+        }
+
+        function showDialog(message, image) {
+            clearInterval(timer);
+            document.getElementById('dialogMessage').textContent = message;
+            document.getElementById('dialogImage').src = image;
+            document.getElementById('dialog').style.display = 'block';
+        }
+
+        function restartGame() {
+            score = 0;
+            document.getElementById('score').textContent = 'Score: 0';
+            document.getElementById('dialog').style.display = 'none';
+            updatePrompt();
+        }
+
+        // Initialize game
+        updatePrompt();
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medium Echo - Harmonia Guardians</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+        }
+        #game-container, #score-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        #instrument-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        #timer-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        #timer-progress {
+            height: 100%;
+            background: #ff5e62;
+            width: 100%;
+            transition: width 1s linear;
+        }
+        #choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        button {
+            background: #ff5e62;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .correct {
+            background: #4CAF50 !important;
+        }
+        .wrong {
+            background: #f44336 !important;
+        }
+        /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ff5e62;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .back-button:hover {
+            background: #ff3c41;
+        }
+    </style>
+</head>
+<body>
+
+<button class="back-button" onclick="location.href='echo.html'">Back</button>
+
+<div id="game-container">
+    <img id="instrument-image" src="" alt="Instrument">
+    <div id="timer-bar">
+        <div id="timer-progress"></div>
+    </div>
+    <div id="choices"></div>
+    <button onclick="skipLevel()">Skip</button>
+</div>
+
+<div id="score-container" style="display: none;">
+    <h1 id="final-score"></h1>
+    <button onclick="location.reload()">Play Again</button>
+    <button onclick="location.href='echo.html'">Back</button>
+</div>
+
+<script>
+    const instruments = [
+        { img: 'ukulele.png', answer: 'Ukulele', choices: ['Ukulele', 'Violin', 'Guitar'] },
+        { img: 'oboe.png', answer: 'Oboe', choices: ['Clarinet', 'Oboe', 'Flute'] },
+        { img: 'frenchhorn.png', answer: 'French Horn', choices: ['Trombone', 'French Horn', 'Trumpet'] },
+        { img: 'cello.png', answer: 'Cello', choices: ['Cello', 'Double Bass', 'Viola'] },
+        { img: 'clarinet.png', answer: 'Clarinet', choices: ['Clarinet', 'Oboe', 'Bassoon'] },
+        { img: 'marimba.png', answer: 'Marimba', choices: ['Marimba', 'Xylophone', 'Glockenspiel'] },
+        { img: 'bagpipes.png', answer: 'Bagpipes', choices: ['Bagpipes', 'Harmonica', 'Accordion'] },
+        { img: 'mandolin.png', answer: 'Mandolin', choices: ['Mandolin', 'Banjo', 'Ukulele'] },
+        { img: 'bongodrums.png', answer: 'Bongo Drums', choices: ['Bongo Drums', 'Congas', 'Djembe'] },
+        { img: 'panflute.png', answer: 'Pan Flute', choices: ['Pan Flute', 'Recorder', 'Piccolo'] }
+    ];
+
+    let currentLevel = 0;
+    let score = 0;
+    let timer;
+
+    function startGame() {
+        if (currentLevel < instruments.length) {
+            const instrument = instruments[currentLevel];
+            document.getElementById('instrument-image').src = instrument.img;
+            const choicesContainer = document.getElementById('choices');
+            choicesContainer.innerHTML = '';
+
+            instrument.choices.forEach(choice => {
+                const button = document.createElement('button');
+                button.textContent = choice;
+                button.onclick = () => checkAnswer(button, choice);
+                choicesContainer.appendChild(button);
+            });
+
+            startTimer();
+        } else {
+            endGame();
+        }
+    }
+
+    function startTimer() {
+        let timeLeft = 5;
+        const progressBar = document.getElementById('timer-progress');
+        progressBar.style.width = '100%';
+
+        timer = setInterval(() => {
+            timeLeft--;
+            progressBar.style.width = `${(timeLeft / 5) * 100}%`;
+
+            if (timeLeft === 0) {
+                clearInterval(timer);
+                nextLevel();
+            }
+        }, 1000);
+    }
+
+    function checkAnswer(button, choice) {
+        clearInterval(timer);
+        if (choice === instruments[currentLevel].answer) {
+            button.classList.add('correct');
+            score++;
+        } else {
+            button.classList.add('wrong');
+        }
+        setTimeout(nextLevel, 500);
+    }
+
+    function skipLevel() {
+        clearInterval(timer);
+        nextLevel();
+    }
+
+    function nextLevel() {
+        currentLevel++;
+        startGame();
+    }
+
+    function endGame() {
+        document.getElementById('game-container').style.display = 'none';
+        document.getElementById('score-container').style.display = 'block';
+        document.getElementById('final-score').textContent = `Your Score: ${score} / ${instruments.length}`;
+    }
+
+    startGame();
+</script>
+
+</body>
+</html>

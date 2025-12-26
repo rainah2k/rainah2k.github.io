@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rai's Landing Page</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="haha.css">
+</head>
+<body>
+
+<header>
+  <div class="mypic">
+    <h1>Rainah Palaganas' Portfolio</h1>
+    <img src="dupe.png" alt="ako to ha">
+    <br><br>
+    <a href="main.html" class="enter-btn">Enter Main Portfolio</a>
+  </div>
+</header>
+
+<section class="reveal">
+  <h2 class="section-title">Featured Works</h2>
+  <div class="projects">
+    <div class="card">
+      <img src="calcu.png" alt="basta calculator">
+      <h3>Calculator</h3>
+      <p>An interactive calculator built with HTML, CSS, and JavaScript for basic arithmetic operations.</p>
+    </div>
+    <div class="card">
+      <img src="game.png" alt="Project Placeholder">
+      <h3>MAPEH Games</h3>
+      <p>Fun educational games for Music, Arts, PE, and Health, created using web technologies.</p>
+    </div>
+    <div class="card">
+      <img src="pj3.png" alt="Project Placeholder">
+      <h3>Kiosk System</h3>
+      <p>A user-friendly digital kiosk interface for easy navigation and information display.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Rainah Palaganas · My Portfolio</p>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+
+  function handleScroll() {
+    const trigger = window.innerHeight * 0.85;
+
+    reveals.forEach(section => {
+      const top = section.getBoundingClientRect().top;
+      const bottom = section.getBoundingClientRect().bottom;
+
+      if (top < trigger && bottom > 0) {
+        section.classList.add('active');
+      } else {
+        section.classList.remove('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('load', handleScroll);
+</script>
+
+
+</body>
+</html>

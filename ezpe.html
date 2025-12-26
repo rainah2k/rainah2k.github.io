@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Trivia Challenge</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('pebg.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container {
+            background: rgba(231, 97, 97, 0.9);
+            border: 5px solid #ffb6c1;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        h1, h2 {
+            color: #fff;
+        }
+        .choice-btn {
+            background: #ffb6c1;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            font-weight: bold;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .choice-btn:hover {
+            background: #ff9aae;
+            transform: scale(1.05);
+        }
+        .choice-btn:active {
+            background: #ff7b8e;
+            transform: scale(0.95);
+        }
+        #result-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 182, 193, 0.95);
+            padding: 20px;
+            border: 2px solid #ffb6c1;
+            border-radius: 15px;
+            z-index: 1000;
+            max-width: 300px;
+            text-align: center;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        #result-dialog button {
+            background: #ffb6c1;
+            color: rgb(51, 0, 0);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.2s, transform 0.1s;
+        }
+        #result-dialog button:hover {
+            background: #ff9aae;
+            transform: scale(1.05);
+        }
+        #result-dialog button:active {
+            background: #ff7b8e;
+            transform: scale(0.95);
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 500;
+        }
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #FFCDD2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.back-button:hover {
+    background: #990000;
+}
+
+    </style>
+</head>
+<body>
+    
+    <button class="back-button" onclick="location.href='sportsquiz.html'">Back</button>
+    
+    <div class="container">
+        <div id="question-container"></div>
+    </div>
+
+    <div id="overlay"></div>
+    <div id="result-dialog">
+        <p id="result-text"></p>
+        <button onclick="nextQuestion()">Next</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What sport is known as 'The Beautiful Game'?",
+                options: ["Basketball", "Soccer", "Tennis"],
+                answer: "Soccer",
+                explanation: "Soccer is often called 'The Beautiful Game' because of its grace and universal appeal."
+            },
+            {
+                question: "How many players are on a standard volleyball team on the court?",
+                options: ["5", "6", "7"],
+                answer: "6",
+                explanation: "Each volleyball team has 6 players on the court at any given time."
+            },
+            {
+                question: "What color card does a soccer referee show to eject a player from the game?",
+                options: ["Yellow", "Blue", "Red"],
+                answer: "Red",
+                explanation: "A red card is shown to a player who is ejected from the game for serious misconduct."
+            },
+            {
+                question: "In which sport do players use a bat to hit a ball and run bases?",
+                options: ["Cricket", "Baseball", "Golf"],
+                answer: "Baseball",
+                explanation: "In baseball, players hit a ball with a bat and run bases to score points."
+            },
+            {
+                question: "The Olympic Games originated in Greece. True or False?",
+                options: ["True", "False"],
+                answer: "True",
+                explanation: "The Olympic Games were first held in ancient Greece around 776 BCE."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let shuffledQuestions = [];
+
+        function startGame() {
+            score = 0;
+            shuffledQuestions = questions.sort(() => 0.5 - Math.random()).slice(0, 5);
+            currentQuestion = 0;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = shuffledQuestions[currentQuestion];
+            let questionHTML = `<h2>${q.question}</h2>`;
+            q.options.forEach(option => {
+                questionHTML += `<button class="choice-btn" onclick="checkAnswer('${option}')">${option}</button>`;
+            });
+            document.getElementById("question-container").innerHTML = questionHTML;
+        }
+
+        function checkAnswer(selected) {
+            const q = shuffledQuestions[currentQuestion];
+            const resultText = document.getElementById("result-text");
+            if (selected === q.answer) {
+                score++;
+                resultText.innerHTML = `Correct! ${q.explanation}`;
+            } else {
+                resultText.innerHTML = `Wrong! The correct answer is <strong>${q.answer}</strong>.<br>${q.explanation}`;
+            }
+            showDialog();
+        }
+        function showDialog() {
+            document.getElementById("overlay").style.display = "block";
+            document.getElementById("result-dialog").style.display = "block";
+        }
+
+        function nextQuestion() {
+            document.getElementById("overlay").style.display = "none";
+            document.getElementById("result-dialog").style.display = "none";
+
+            currentQuestion++;
+            if (currentQuestion < 5) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            let resultMessage = score >= 3 ? "You Passed! 🎉" : "Better Luck Next Time!";
+            document.getElementById("question-container").innerHTML = `
+                <h2>${resultMessage}</h2>
+                <p>Your score: ${score}/5</p>
+                <button class="choice-btn" onclick="startGame()">Play Again</button>
+            `;
+        }
+
+        window.onload = startGame;
+    </script>
+</body>
+</html>

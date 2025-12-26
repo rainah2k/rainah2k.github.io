@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TINDAHAN NI RAINAH</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --pink:#f7b2d9;
+  --purple:#c3b5ff;
+  --bg:#fdf7ff;
+  --card:#ffffff;
+  --text:#4b3b5f;
+}
+
+*{
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  margin:0;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  height:100vh;
+}
+
+.kiosk{
+  display:grid;
+  grid-template-columns:70% 30%;
+  height:100vh;
+  background:var(--bg);
+}
+.header{
+  grid-column:1/3;
+  padding:20px 40px;
+  font-size:26px;
+  font-weight:bold;
+  color:white;
+  background:linear-gradient(to right,var(--purple),var(--pink));
+  display:flex;
+  align-items:center;    
+  justify-content:center;
+  text-align:center;
+}
+
+
+.menu{
+  padding:30px;
+  overflow-y:auto;
+}
+.pagkain-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+.pagkain{
+  background:var(--card);
+  border-radius:25px;
+  overflow:hidden;
+  box-shadow:0 15px 35px rgba(0,0,0,.08);
+  transition:.3s;
+}
+.pagkain:hover{
+  transform:translateY(-8px);
+}
+.pagkain img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+}
+.pagkain-content{
+  padding:15px;
+}
+.pagkain h4{
+  margin:5px 0;
+  color:var(--text);
+}
+.pagkain p{
+  font-size:13px;
+  opacity:.7;
+}
+.add{
+  margin-top:10px;
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:20px;
+  background:linear-gradient(to right,var(--pink),var(--purple));
+  color:white;
+  cursor:pointer;
+}
+
+.sidebar{
+  padding:20px;
+  background:rgba(255,255,255,.9);
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.promo{
+  padding:20px;
+  border-radius:25px;
+  color:white;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  animation:pulse 3s infinite;
+}
+
+.card{
+  background:var(--card);
+  border-radius:25px;
+  padding:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  margin:8px 0;
+}
+.cart-item button{
+  border:none;
+  background:#eee;
+  border-radius:50%;
+  width:22px;
+  cursor:pointer;
+}
+.total{
+  font-weight:bold;
+  margin-top:10px;
+}
+
+.btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:20px;
+  background:linear-gradient(to right,var(--purple),var(--pink));
+  color:white;
+  margin-top:10px;
+  cursor:pointer;
+}
+
+.pay{
+  background:black;
+  color:white;
+  padding:12px;
+  border-radius:15px;
+  margin-top:8px;
+  text-align:center;
+  cursor:pointer;
+}
+
+.hidden{display:none;}
+
+@keyframes pulse{
+  0%{box-shadow:0 0 0 rgba(255,255,255,0)}
+  50%{box-shadow:0 0 40px rgba(255,255,255,.6)}
+  100%{box-shadow:0 0 0 rgba(255,255,255,0)}
+}
+.back-btn{
+  position:fixed;
+  top:25px;
+  left:25px;
+  padding:12px 22px;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(15px);
+  border-radius:35px;
+  color:white;
+  font-size:15px;
+  font-weight:600;
+  text-decoration:none;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  z-index:1000;
+  transition:.3s ease, transform .3s ease;
+}
+
+.back-btn:hover{
+  background:linear-gradient(to right, #c3b5ff, #f7b2d9);
+  transform:scale(1.08);
+  color:white;
+  box-shadow:0 12px 30px rgba(0,0,0,0.25);
+}
+
+
+
+</style>
+</head>
+
+<body>
+
+      <a href="knr-intro.html" class="back-btn">← Back</a>
+<div class="kiosk">
+
+<div class="header">Tindahan ni Rainah (๑˘ڡ˘๑) ♡</div>
+<div class="menu" id="menu">
+  <div class="pagkain-grid">
+
+    <div class="pagkain" data-name="Burger" data-price="149"><img src="food1.jpg"><div class="pagkain-content"><h4>Cheesy Burger</h4><p>Juicy & cheesy</p><button class="add">Add</button></div></div>
+    <div class="pagkain" data-name="Fried Chicken" data-price="129"><img src="food2.jpg"><div class="pagkain-content"><h4>Fried Chicken</h4><p>Crispy</p><button class="add">Add</button></div></div>
+    <div class="pagkain" data-name="Spaghetti" data-price="99"><img src="food3.jpg"><div class="pagkain-content"><h4>Spaghetti</h4><p>Sweet style</p><button class="add">Add</button></div></div>
+    <div class="pagkain" data-name="Pizza" data-price="79"><img src="food4.jpg"><div class="pagkain-content"><h4>Pizza Slice</h4><p>Cheesy</p><button class="add">Add</button></div></div>
+    <div class="pagkain" data-name="Milk Tea" data-price="89"><img src="food5.jpg"><div class="pagkain-content"><h4>Milk Tea</h4><p>Brown sugar</p><button class="add">Add</button></div></div>
+    <div class="pagkain" data-name="Fries" data-price="59"><img src="food6.jpg"><div class="pagkain-content"><h4>Fries</h4><p>Crispy</p><button class="add">Add</button></div></div>
+    <div class="pagkain" data-name="Hotdog" data-price="69"><img src="food7.jpg"><div class="pagkain-content"><h4>Hotdog</h4><p>Classic</p><button class="add">Add</button></div></div>
+    <div class="pagkain" data-name="Ice Cream" data-price="49"><img src="food8.jpg"><div class="pagkain-content"><h4>Ice Cream</h4><p>Vanilla</p><button class="add">Add</button></div></div>
+    <div class="pagkain" data-name="Nuggets" data-price="99"><img src="food9.jpg"><div class="pagkain-content"><h4>Nuggets</h4><p>6 pcs</p><button class="add">Add</button></div></div>
+    <div class="pagkain" data-name="Iced Coffee" data-price="89"><img src="food10.jpg"><div class="pagkain-content"><h4>Iced Coffee</h4><p>Creamy</p><button class="add">Add</button></div></div>
+
+  </div>
+</div>
+
+<div class="sidebar">
+
+<div class="promo">
+  <h3>Today’s Promo</h3>
+  <p>Free Fries kapag kamukha ni Ada Wong!</p>
+</div>
+
+<div class="card">
+  <h3>Your Order</h3>
+  <div id="cartItems"></div>
+  <div class="total">Total: ₱<span id="total">0</span></div>
+  <button class="btn" id="checkout">Checkout</button>
+</div>
+
+<div class="card hidden" id="payment">
+  <h3>Payment</h3>
+  <div class="pay" id="payNow">Pay Now</div>
+</div>
+
+<div class="card hidden" id="status">
+  <h3 id="orderStatus">Preparing Order...</h3>
+  <button class="btn" id="restart">New Order</button>
+</div>
+
+</div>
+</div>
+
+<script>
+let cart = {};
+const cartItems = document.getElementById("cartItems");
+const totalEl = document.getElementById("total");
+
+document.querySelectorAll(".add").forEach(btn=>{
+  btn.onclick=()=>{
+    const pagkain=btn.closest(".pagkain");
+    const name=pagkain.dataset.name;
+    const price=Number(pagkain.dataset.price);
+    cart[name]?cart[name].qty++:cart[name]={price,qty:1};
+    renderCart();
+  }
+});
+
+function renderCart(){
+  cartItems.innerHTML="";
+  let total=0;
+  for(let item in cart){
+    total+=cart[item].price*cart[item].qty;
+    cartItems.innerHTML+=`
+      <div class="cart-item">
+        ${item} x${cart[item].qty}
+        <button onclick="removeItem('${item}')">−</button>
+      </div>`;
+  }
+  totalEl.textContent=total;
+}
+
+function removeItem(item){
+  cart[item].qty--;
+  if(cart[item].qty<=0) delete cart[item];
+  renderCart();
+}
+
+checkout.onclick=()=>{
+  if(Object.keys(cart).length===0) return alert("Cart is empty");
+  document.getElementById("payment").classList.remove("hidden");
+};
+
+payNow.onclick=()=>{
+  document.getElementById("payment").classList.add("hidden");
+  document.getElementById("status").classList.remove("hidden");
+  setTimeout(()=>orderStatus.textContent="Oki na bai, Wait kana lang dun sa malayo!",3000);
+};
+
+restart.onclick=()=>{
+  cart={};
+  renderCart();
+  totalEl.textContent=0;
+  document.getElementById("status").classList.add("hidden");
+};
+</script>
+
+</body>
+</html>

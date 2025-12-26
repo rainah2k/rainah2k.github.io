@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front Board</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+        }
+
+        #back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 2;
+        }
+
+        .button-container {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 2;
+        }
+
+        .button-container img {
+            width: 200px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .button-container img:hover {
+            transform: scale(1.1);
+        }
+
+        .game-button {
+            position: fixed;
+            top: 90%;
+            right: 30px;
+            transform: translateY(-30%);
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            backdrop-filter: blur(10px); 
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 2;
+            display: none;
+            transition: all 0.3s ease;
+        }
+
+        .game-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+    </style>
+</head>
+<body>
+    <audio autoplay loop>
+        <source src="bggggg.mp3" type="audio/mp3">
+    </audio>
+    <video id="video-bg" autoplay loop muted>
+        <source src="livemusic.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+
+    <button id="back-btn" onclick="goBack()">Back</button>
+
+
+    <div class="button-container">
+        <img src="music.png" alt="Music" onclick="changeVideo('livemusic.mp4')">
+        <img src="arts.png" alt="Arts" onclick="changeVideo('livearts.mp4')">
+        <img src="pe.png" alt="PE" onclick="changeVideo('pelive.mp4')">
+        <img src="health.png" alt="Health" onclick="changeVideo('healthlive.mp4')">
+    </div>
+
+    <button id="music-game-btn" class="game-button" onclick="goToGame('musicgame.html')">▶ Play Music Game</button>
+    <button id="arts-game-btn" class="game-button" onclick="goToGame('artsgame.html')">▶ Play Arts Game</button>
+    <button id="pe-game-btn" class="game-button" onclick="goToGame('pegame.html')">▶ Play PE Game</button>
+    <button id="health-game-btn" class="game-button" onclick="goToGame('healthgame.html')">▶ Play Health Game</button>
+
+    <script>
+        function changeVideo(videoSrc) {
+            document.getElementById('video-bg').src = videoSrc;
+            document.getElementById('video-bg').play();
+            showGameButton(videoSrc);
+        }
+
+        function goBack() {
+            window.location.href = 'mainmenu.html';
+        }
+
+        function goToGame(gamePage) {
+            window.location.href = gamePage;
+        }
+
+        function showGameButton(videoSrc) {
+            document.getElementById('music-game-btn').style.display = 'none';
+            document.getElementById('arts-game-btn').style.display = 'none';
+            document.getElementById('pe-game-btn').style.display = 'none';
+            document.getElementById('health-game-btn').style.display = 'none';
+
+            if (videoSrc === 'livemusic.mp4') {
+                document.getElementById('music-game-btn').style.display = 'block';
+            } else if (videoSrc === 'livearts.mp4') {
+                document.getElementById('arts-game-btn').style.display = 'block';
+            } else if (videoSrc === 'pelive.mp4') {
+                document.getElementById('pe-game-btn').style.display = 'block';
+            } else if (videoSrc === 'healthlive.mp4') {
+                document.getElementById('health-game-btn').style.display = 'block';
+            }
+        }
+    </script>
+
+</body>
+</html>

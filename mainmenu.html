@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Menu</title>
+    <style>
+        #background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .menu {
+            position: absolute;
+            top: 60%;
+            left: 5%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu button {
+            padding: 15px 30px;
+            font-size: 20px;
+            border: none;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 25px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu button:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #ff4b2b, #ff416c);
+        }
+
+        .credits-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+            z-index: 1000;
+        }
+
+        .credits-popup h2 {
+            margin-top: 0;
+        }
+
+        .close-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            background: darkred;
+        }
+
+        .quit-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+            z-index: 1000;
+        }
+
+        .quit-popup button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .yes-btn {
+            background: green;
+            color: white;
+        }
+
+        .yes-btn:hover {
+            background: darkgreen;
+        }
+
+        .no-btn {
+            background: red;
+            color: white;
+        }
+
+        .no-btn:hover {
+            background: darkred;
+        }
+
+    </style>
+</head>
+<body>
+
+    <audio autoplay loop>
+        <source src="anatano.mp3" type="audio/mp3">
+    </audio>
+    
+    <video autoplay loop muted id="background-video">
+        <source src="mainmenu.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+
+    <div class="menu">
+        <button onclick="startGame()">Start</button>
+        <button onclick="showCredits()">Credits</button>
+        <button onclick="switchProfile()">Switch Profile</button>
+        <button onclick="confirmQuit()">Quit</button>
+    </div>
+
+    <div id="creditsPopup" class="credits-popup">
+        <h2>Game Credits</h2>
+        <p><strong>Project Leader:</strong> Rainah Palaganas</p>
+        <p><strong>Programmers:</strong> Vince Allhen Cuevas, Gian Jaxel Jaron</p>
+        <p><strong>Designers:</strong> Rainah Palaganas, Gian Jaxel Jaron, Vince Allhen Cuevas</p>
+        <p><strong>Writers:</strong> Rainah Palaganas, Gian Jaxel Jaron, Vince Allhen Cuevas, Jenny Matundan</p>
+        <p><strong>Testers:</strong> Vince Allhen Cuevas, Gian Jaxel Jaron</p>
+        <p><strong>Special Thanks:</strong> Our teachers, classmates, and various online resources.</p>
+        <button class="close-btn" onclick="closeCredits()">Close</button>
+    </div>
+
+    <div id="quitPopup" class="quit-popup">
+        <p>Are you sure you want to quit?</p>
+        <button class="yes-btn" onclick="quitGame()">Yes</button>
+        <button class="no-btn" onclick="closeQuitPopup()">No</button>
+    </div>
+
+    <script>
+        function startGame() {
+            window.location.href = "frontboard.html";
+        }
+
+        function showCredits() {
+            document.getElementById("creditsPopup").style.display = "block";
+        }
+
+        function closeCredits() {
+            document.getElementById("creditsPopup").style.display = "none";
+        }
+
+        function switchProfile() {
+            window.location.href = "login.html";
+        }
+
+        function confirmQuit() {
+            document.getElementById("quitPopup").style.display = "block";
+        }
+
+        function closeQuitPopup() {
+            document.getElementById("quitPopup").style.display = "none";
+        }
+
+        function quitGame() {
+            window.location.href = "main.html#projects";
+        }
+    </script>
+
+</body>
+</html>

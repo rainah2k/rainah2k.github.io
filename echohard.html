@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hard Echo - Harmonia Guardians</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+        }
+
+        #game-container, #score-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        #instrument-description {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        #timer-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        #timer-progress {
+            height: 100%;
+            background: #ff5e62;
+            width: 100%;
+            transition: width 1s linear;
+        }
+
+        #choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        button {
+            background: #ff5e62;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .correct {
+            background: #4CAF50 !important;
+        }
+
+        .wrong {
+            background: #f44336 !important;
+        }
+
+        #back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ff5e62;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<button id="back-button" onclick="location.href='echo.html'">Back</button>
+
+<div id="game-container">
+    <div id="instrument-description"></div>
+    <div id="timer-bar">
+        <div id="timer-progress"></div>
+    </div>
+    <div id="choices"></div>
+    <button onclick="skipLevel()">Skip</button>
+</div>
+
+<div id="score-container" style="display: none;">
+    <h1 id="final-score"></h1>
+    <button onclick="location.reload()">Play Again</button>
+    <button onclick="location.href='echo.html'">Back</button>
+</div>
+
+<script>
+    const instruments = [
+        { desc: "An electronic instrument controlled without physical contact, producing eerie, ethereal sounds.", answer: "Theremin" },
+        { desc: "A mechanical string instrument played by cranking a wheel that rubs against the strings.", answer: "Hurdy-Gurdy" },
+        { desc: "A long wooden wind instrument from Australia, producing deep, droning sounds.", answer: "Didgeridoo" },
+        { desc: "A traditional Japanese string instrument with movable bridges and a long neck.", answer: "Koto" },
+        { desc: "A small African thumb piano with metal tines plucked to produce melodic tones.", answer: "Kalimba" },
+        { desc: "A Greek string instrument similar to a lute, known for its rich, metallic sound.", answer: "Bouzouki" },
+        { desc: "A Japanese bamboo flute known for its breathy, meditative sound.", answer: "Shakuhachi" },
+        { desc: "A steel percussion instrument that produces soft, resonant tones when struck.", answer: "Hang Drum" },
+        { desc: "A plucked string instrument from India, known for its distinctive twangy sound.", answer: "Sitar" },
+        { desc: "An instrument made of glass bowls that produce ethereal sounds when rubbed with wet fingers.", answer: "Glass Harmonica" }
+    ];
+
+    let currentLevel = 0;
+    let score = 0;
+    let timer;
+
+    function startGame() {
+        if (currentLevel < instruments.length) {
+            const instrument = instruments[currentLevel];
+            document.getElementById('instrument-description').textContent = instrument.desc;
+
+            const choicesContainer = document.getElementById('choices');
+            choicesContainer.innerHTML = '';
+
+            // Randomize choices
+            const shuffledChoices = instruments
+                .map(inst => inst.answer)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+
+            if (!shuffledChoices.includes(instrument.answer)) {
+                shuffledChoices[Math.floor(Math.random() * 3)] = instrument.answer;
+            }
+
+            shuffledChoices.forEach(choice => {
+                const button = document.createElement('button');
+                button.textContent = choice;
+                button.onclick = () => checkAnswer(button, choice);
+                choicesContainer.appendChild(button);
+            });
+
+            startTimer();
+        } else {
+            endGame();
+        }
+    }
+
+    function startTimer() {
+        let timeLeft = 10;
+        const progressBar = document.getElementById('timer-progress');
+        progressBar.style.width = '100%';
+
+        timer = setInterval(() => {
+            timeLeft--;
+            progressBar.style.width = `${(timeLeft / 10) * 100}%`;
+
+            if (timeLeft === 0) {
+                clearInterval(timer);
+                nextLevel();
+            }
+        }, 1000);
+    }
+
+    function checkAnswer(button, choice) {
+        clearInterval(timer);
+        if (choice === instruments[currentLevel].answer) {
+            button.classList.add('correct');
+            score++;
+        } else {
+            button.classList.add('wrong');
+        }
+        setTimeout(nextLevel, 500);
+    }
+
+    function skipLevel() {
+        clearInterval(timer);
+        nextLevel();
+    }
+
+    function nextLevel() {
+        currentLevel++;
+        startGame();
+    }
+
+    function endGame() {
+        document.getElementById('game-container').style.display = 'none';
+        document.getElementById('score-container').style.display = 'block';
+        document.getElementById('final-score').textContent = `Your Score: ${score} / ${instruments.length}`;
+    }
+
+    startGame();
+</script>
+
+</body>
+</html>

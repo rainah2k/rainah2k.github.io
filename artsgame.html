@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LET ME COOK</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background: linear-gradient(45deg, #e7e4b6, #f8ff9d);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .image-button {
+            width: 150px;
+            height: auto;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .image-button img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: all 0.4s ease;
+        }
+
+        .image-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #dacd86;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+            background: #ffdb3c;
+        }
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #dacd86;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .logout-button:hover {
+            background: #f2ff3c;
+        }
+
+        .confirmation-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .dialog-buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .dialog-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .confirm-btn {
+            background: #ffd561;
+            color: white;
+        }
+
+        .confirm-btn:hover {
+            background: #ffd561;
+        }
+
+        .cancel-btn {
+            background: #ccc;
+            color: black;
+        }
+
+        .cancel-btn:hover {
+            background: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+    <audio autoplay loop>
+        <source src="meh.mp3" type="audio/mp3">
+    </audio>
+
+    <button class="back-button" onclick="location.href='frontboard.html'">Back</button>
+
+    <button class="logout-button" onclick="openLogoutDialog()">Logout</button>
+
+    <div id="logoutDialog" class="confirmation-dialog">
+        <p>Are you sure you want to log out?</p>
+        <div class="dialog-buttons">
+            <button class="confirm-btn" onclick="logout()">Yes</button>
+            <button class="cancel-btn" onclick="closeLogoutDialog()">No</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="image-button" onclick="location.href='chromatic.html'">
+            <img src="arts1.png" alt="Nota">
+        </div>
+        <div class="image-button" onclick="location.href='harmony.html'">
+            <img src="arts2.png" alt="Doremi">
+        </div>
+        <div class="image-button" onclick="location.href='clues.html'">
+            <img src="arts3.png" alt="Rhythm">
+        </div>
+        <div class="image-button" onclick="location.href='insight.html'">
+            <img src="arts4.png" alt="Melody">
+        </div>
+        <div class="image-button" onclick="location.href='puzzle.html'">
+            <img src="arts5.png" alt="Echo">
+        </div>
+    </div>
+
+    <script>
+        function openLogoutDialog() {
+            document.getElementById('logoutDialog').style.display = 'block';
+        }
+
+        function closeLogoutDialog() {
+            document.getElementById('logoutDialog').style.display = 'none';
+        }
+
+        function logout() {
+            window.location.href = 'index.html';
+        }
+    </script>
+
+</body>
+</html>

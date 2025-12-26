@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hard Level - Note Identification</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom right, #ffd1dc, #ffb6c1);
+            font-family: Arial, sans-serif;
+        }
+        .game-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            max-width: 1000px;
+            width: 90%;
+        }
+        .left-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        #status-image {
+            width: 200px;
+        }
+        #incorrect-counter {
+            font-size: 24px;
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+        .right-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 60%;
+        }
+        #note-container {
+            width: 300px;
+            height: 300px;
+            border: 4px dashed #ff69b4;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+        }
+        #note-container img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        #score-mistakes {
+            font-size: 20px;
+            color: #ff69b4;
+        }
+        .note-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .note-buttons button {
+            width: 150px;
+            height: 60px;
+            cursor: pointer;
+            border-radius: 12px;
+            border: none;
+            background: #ff69b4;
+            color: white;
+            font-size: 16px;
+            transition: transform 0.1s;
+        }
+        .note-buttons button.wrong {
+            animation: shake 0.2s;
+            background: #ff4d4d;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+        }
+        #timer-container {
+            width: 100%;
+            height: 20px;
+            background: #ff69b4;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        #timer-bar {
+            width: 100%;
+            height: 100%;
+            background: #4caf50;
+            transition: width linear;
+        }
+        #game-over-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 10;
+        }
+        #game-over-dialog img {
+            width: 150px;
+            margin-bottom: 15px;
+        }
+        #game-over-dialog button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            background: #ff69b4;
+        }
+        /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ff5e62;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+            background: #ff3c41;
+        }
+    </style>
+</head>
+<body>
+    
+    <button class="back-button" onclick="location.href='melody.html'">Back</button>
+    
+    <div class="game-container">
+        <!-- Left Side: Status and Mistakes -->
+        <div class="left-container">
+            <img id="status-image" src="sigma.png" alt="Status">
+            <div id="incorrect-counter">Incorrect: 0/3</div>
+        </div>
+
+        <!-- Right Side: Game Content -->
+        <div class="right-container">
+            <div id="note-container"></div>
+            <div id="score-mistakes">Score: 0</div>
+            <div class="note-buttons" id="note-buttons"></div>
+            <div id="timer-container">
+                <div id="timer-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-over-dialog">
+        <img src="hays.jpg" alt="Game Over">
+        <h2>Game Over</h2>
+        <button onclick="window.location.reload()">Play Again</button>
+        <button onclick="window.location.href = 'musicgame.html'">Back</button>
+    </div>
+
+    <script>
+        const notes = [
+            { name: "Sixteenth Note", img: "sixteenth.png" },
+            { name: "Whole Note", img: "wholenote.png" },
+            { name: "Half Note", img: "halfnote.png" },
+            { name: "Eighth Note", img: "eighthnote.png" },
+            { name: "Treble Clef", img: "trebleclef.png" },
+            { name: "Flat", img: "flat.png" },
+            { name: "Sharp", img: "sharp.png" },
+            { name: "Double Sharp", img: "doublesharp.png" },
+            { name: "Double Flat", img: "doubleflat.png" },
+            { name: "Fermata", img: "fermata.png" }
+        ];
+
+        let mistakes = 0;
+        let score = 0;
+        let timer;
+        const totalTime = 3000;
+
+        function newRound() {
+            if (mistakes >= 3) {
+                showGameOver();
+                return;
+            }
+
+            const noteContainer = document.getElementById("note-container");
+            const noteButtons = document.getElementById("note-buttons");
+            const timerBar = document.getElementById("timer-bar");
+
+            const correctNote = notes[Math.floor(Math.random() * notes.length)];
+            noteContainer.innerHTML = `<img src="${correctNote.img}" alt="${correctNote.name}">`;
+
+            const shuffledNotes = [...notes].sort(() => 0.5 - Math.random()).slice(0, 2);
+            shuffledNotes.push(correctNote);
+            shuffledNotes.sort(() => 0.5 - Math.random());
+
+            noteButtons.innerHTML = "";
+            shuffledNotes.forEach(note => {
+                const btn = document.createElement("button");
+                btn.textContent = note.name;
+                btn.onclick = () => checkAnswer(note, correctNote);
+                noteButtons.appendChild(btn);
+            });
+
+            clearInterval(timer);
+            timerBar.style.transition = "none";
+            timerBar.style.width = "100%";
+            setTimeout(() => {
+                timerBar.style.transition = `width ${totalTime}ms linear`;
+                timerBar.style.width = "0%";
+            }, 50);
+
+            timer = setTimeout(() => {
+                mistakes++;
+                updateStatus();
+                newRound();
+            }, totalTime);
+        }
+
+        function checkAnswer(selectedNote, correctNote) {
+            if (selectedNote === correctNote) {
+                score++;
+            } else {
+                mistakes++;
+                updateStatus();
+                if (mistakes >= 3) showGameOver();
+            }
+            updateScoreMistakes();
+            clearTimeout(timer);
+            newRound();
+        }
+
+        function updateStatus() {
+            document.getElementById("status-image").src = ["sigma.png", "nice.png", "sheesh.png", "sosad.png"][mistakes];
+            document.getElementById("incorrect-counter").textContent = `Incorrect: ${mistakes}/3`;
+        }
+
+        function updateScoreMistakes() {
+            document.getElementById("score-mistakes").textContent = `Score: ${score}`;
+        }
+
+        function showGameOver() {
+            document.getElementById("game-over-dialog").style.display = "block";
+        }
+
+        newRound();
+    </script>
+</body>
+</html>

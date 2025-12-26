@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medium: Guess the Sport</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: url('pebg.jpg') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        #game-container, #game-over {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+        #image-container img {
+            width: 100%;
+            border: 5px solid #333;
+            border-radius: 5px;
+        }
+        #word {
+            font-size: 2rem;
+            margin: 20px 0;
+            letter-spacing: 5px;
+        }
+        #letters {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .letter-btn {
+            background: linear-gradient(145deg, #B22222, #8B0000);
+            color: white;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #FF0000, 0 0 20px #FF0000;
+            border: none;
+            padding: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .letter-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px #FF0000;
+        }
+        .letter-btn:disabled {
+            background: #ccc;
+            color: #777;
+            text-shadow: none;
+            cursor: not-allowed;
+        }
+        #timer {
+            font-size: 1.5rem;
+            color: red;
+            margin: 10px 0;
+        }
+        #lives {
+            font-size: 1.5rem;
+            color: red;
+            margin: 10px 0;
+        }
+        #game-over {
+            display: none;
+        }
+        #play-again {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #FF6347;
+            color: #fff;
+            border: none;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 15px #FF6347;
+        }
+         .back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #b30000; /* Dark Red */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.back-button:hover {
+    background: #990000; /* Darker Red on Hover */
+}
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="location.href='mysticg.html'">Back</button>
+    <!-- Game Container -->
+    <div id="game-container">
+        <div id="lives">💖💖💖</div>
+        <div id="image-container">
+            <img id="sport-image" src="" alt="Sport Image">
+        </div>
+        <div id="timer">10</div>
+        <div id="word"></div>
+        <div id="letters"></div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over">
+        <h1>Game Over!</h1>
+        <h2 id="final-score"></h2>
+        <button id="play-again">Play Again</button>
+    </div>
+    
+    <script>
+        let sports = [
+            { name: "SEPAKTAKRAW", image: "sepaktakraw.jpg" },
+            { name: "QUIDDITCH", image: "quidditch.jpg" },
+            { name: "HOCKEY", image: "hockey.jpg" },
+            { name: "TAEKWONDO", image: "taekwondo.jpg" },
+            { name: "BASEBALL", image: "baseball.jpg" },
+            { name: "FENCING", image: "fencing.jpg" },
+            { name: "ARCHERY", image: "archery.jpg" },
+            { name: "ROWING", image: "rowing.jpg" },
+            { name: "HANDBALL", image: "handball.jpg" },
+            { name: "POLO", image: "polo.jpg" }
+        ];
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const lettersContainer = document.getElementById("letters");
+        const wordContainer = document.getElementById("word");
+        const sportImage = document.getElementById("sport-image");
+        const gameContainer = document.getElementById("game-container");
+        const gameOverScreen = document.getElementById("game-over");
+        const playAgainButton = document.getElementById("play-again");
+        const timerElement = document.getElementById("timer");
+        const livesElement = document.getElementById("lives");
+        const finalScoreElement = document.getElementById("final-score");
+
+        let currentSport = 0;
+        let guessedWord = [];
+        let timer;
+        let score = 0;
+        let lives = 3;
+        let timeLeft = 10;  // Set timer to 10 seconds
+
+        function loadSport() {
+            if (currentSport >= sports.length) {
+                gameContainer.style.display = "none";
+                gameOverScreen.style.display = "block";
+                finalScoreElement.textContent = `Final Score: ${score}`;
+                return;
+            }
+
+            guessedWord = Array(sports[currentSport].name.length).fill("_");
+            updateWord();
+            sportImage.src = sports[currentSport].image;
+
+            lettersContainer.innerHTML = "";
+            letters.split("").forEach(letter => {
+                const btn = document.createElement("button");
+                btn.textContent = letter;
+                btn.className = "letter-btn";
+                btn.onclick = () => guessLetter(letter, btn);
+                lettersContainer.appendChild(btn);
+            });
+
+            // Reset and start timer
+            clearInterval(timer);
+            timeLeft = 10;  // Reset to 10 seconds
+            timerElement.textContent = timeLeft;
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    handleTimerEnd();
+                }
+            }, 1000);
+        }
+
+        function guessLetter(letter, button) {
+            button.disabled = true;
+            let correct = false;
+
+            sports[currentSport].name.split("").forEach((char, index) => {
+                if (char === letter) {
+                    guessedWord[index] = char;
+                    correct = true;
+                }
+            });
+
+            updateWord();
+            if (!guessedWord.includes("_")) {
+                clearInterval(timer);
+                score += 10;
+                currentSport++;
+                setTimeout(loadSport, 1000);
+            }
+        }
+
+        function updateWord() {
+            wordContainer.textContent = guessedWord.join(" ");
+        }
+
+        function handleTimerEnd() {
+            lives--;
+            if (lives === 2) {
+                livesElement.textContent = "💖💖🖤";
+            } else if (lives === 1) {
+                livesElement.textContent = "💖🖤🖤";
+            } else if (lives === 0) {
+                livesElement.textContent = "🖤🖤🖤";
+                clearInterval(timer);
+                gameContainer.style.display = "none";
+                gameOverScreen.style.display = "block";
+                finalScoreElement.textContent = `Final Score: ${score}`;
+                return;
+            }
+
+            currentSport++;
+            if (currentSport < sports.length) {
+                setTimeout(loadSport, 1000);
+            } else {
+                gameContainer.style.display = "none";
+                gameOverScreen.style.display = "block";
+                finalScoreElement.textContent = `Final Score: ${score}`;
+            }
+        }
+
+        playAgainButton.onclick = () => {
+            currentSport = 0;
+            score = 0;
+            lives = 3;
+            livesElement.textContent = "💖💖💖";
+            gameOverScreen.style.display = "none";
+            gameContainer.style.display = "block";
+            loadSport();
+        };
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        shuffle(sports);
+        loadSport();
+    </script>
+</body>
+</html>

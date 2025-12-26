@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Main Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="hatdog.css">
+</head>
+
+<body>
+<nav class="main-header">
+  <a href="rainah.html" class="back-btn">Back</a>
+  <ul class="nav-links">
+    <li><a href="#about"><b>About</b></a></li>
+    <li><a href="#hobbies"><b>Hobbies</b></a></li>
+    <li><a href="#projects"><b>Projects</b></a></li>
+    <li><a href="#gallery"><b>Gallery</b></a></li>
+    <li><a href="#contact"><b>Contact</b></a></li>
+  </ul>
+</nav>
+
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+
+
+<header class="rairai">
+  <div class="rairai-content">
+        <div class="rairai-image">
+      <img src="akoto.jpg" alt="Rai Dionida">
+    </div>
+    <h1>
+      Hi, I’m <span class="highlight">Rai</span><br>
+      I design and build things for the web
+    </h1>
+    <p>
+      I’m a student and aspiring web designer focused on clean UI, creative layouts,
+      and turning ideas into interactive experiences. This portfolio shows who I am,
+      how I design, and the work I’m growing through.
+    </p>
+
+  </div>
+</header>
+
+
+<section id="about" class="section reveal">
+  <h2 class="section-title">About Me</h2>
+  <section id="ewankokayrainah">
+
+    <div class="ikotikot-wrapper reveal">
+      <div class="arrow left" onclick="move(-1)">‹</div>
+
+      <div class="ikotikot reveal">
+        <div class="card left-pos" id="left"></div>
+        <div class="card center" id="center"></div>
+        <div class="card right-pos" id="right"></div>
+      </div>
+
+      <div class="arrow right" onclick="move(1)">›</div>
+    </div>
+
+    <div class="details reveal" id="details">
+      <div class="accordion">
+        <div class="acc-img"><img id="a1"></div>
+        <div class="acc-img"><img id="a2"></div>
+        <div class="acc-img"><img id="a3"></div>
+      </div>
+      <div class="text" id="text"></div>
+    </div>
+
+  </section>
+</section>
+
+
+<section id="hobbies" class="reveal">
+  <h2 class="section-title">Hobbies</h2>
+  <div class="hobbies">
+    <div class="hobby-card">
+      <h3>Photography</h3>
+      <p>Capturing moments and exploring perspectives.</p>
+    </div>
+    <div class="hobby-card">
+      <h3>Playing Badminton</h3>
+      <p>Staying active and enjoying competitive fun.</p>
+    </div>
+    <div class="hobby-card">
+      <h3>Spending Time with Cats</h3>
+      <p>Relaxing and bonding with furry friends.</p>
+    </div>
+    <div class="hobby-card">
+      <h3>Reading</h3>
+      <p>Exploring new worlds through books.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="projects" class="reveal">
+  <h2 class="section-title">Projects</h2>
+
+  <div class="projects-scroll reveal">
+
+    <div class="project-card reveal">
+      <div class="project-image">
+        <img src="posa-one.png" alt="Photo Album">
+      </div>
+      <div class="project-info">
+        <h3>Photo Album</h3>
+        <p>UTS Project.</p>
+        <a href="firstproject.html">View Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-image">
+        <img src="pj2cover.jpg" alt="Types of Animations in CSS">
+      </div>
+      <div class="project-info">
+        <h3>Types of Animations in CSS</h3>
+        <p>Grade 12.</p>
+        <a href="secondproject.html">View Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-image">
+        <img src="calcu.png" alt="Calculator">
+      </div>
+      <div class="project-info reveal">
+        <h3>Calculator</h3>
+        <p>A simple calculator from my SHS</p>
+        <a href="thirdproject.html">View Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-image">
+        <img src="game.png" alt="Harmonia Guardian">
+      </div>
+      <div class="project-info">
+        <h3>Harmonia Guardian</h3>
+        <p>An HTML game based in MAPEH subject.</p>
+        <a href="mainmenu.html">View Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-image">
+        <img src="pj3.png" alt="Tindahan ni Rainah">
+      </div>
+      <div class="project-info">
+        <h3>Tindahan ni Rainah</h3>
+        <p>Kiosk System.</p>
+        <a href="knr-intro.html">View Project →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<section id="emes" class="reveal">
+  <h2 class="section-title">Skills</h2>
+
+  <div class="emes-grid reveal">
+    
+    <div class="eme-card reveal">
+      <div class="eme-inner">
+        <div class="eme-front">
+          <h3>Technical</h3>
+        </div>
+        <div class="eme-back">
+          <p>Photo & graphic editing.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="eme-card reveal">
+      <div class="eme-inner">
+        <div class="eme-front">
+          <h3>HTML & CSS</h3>
+        </div>
+        <div class="eme-back">
+          <p>Responsive layouts with clean structure & animations.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="eme-card reveal">
+      <div class="eme-inner">
+        <div class="eme-front">
+          <h3>JavaScript</h3>
+        </div>
+        <div class="eme-back">
+          <p>Interactive UI effects & scroll-based behaviors.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="eme-card reveal">
+      <div class="eme-inner">
+        <div class="eme-front">
+          <h3>Creative Skills</h3>
+        </div>
+        <div class="eme-back">
+          <p>Skilled in journaling, and designing visual layouts and galleries.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="education" class="reveal">
+  <h2 class="section-title">Education</h2>
+
+  <div class="education-container">
+    <div class="info-card reveal">
+      <h3>Senior High School – (TVL-ICT)</h3>
+      <p>Graduated from <b>Alaminos Integrated National High School</b>. Focused on UI design, web development, and creative digital projects. Learned to build personal websites, design user interfaces, and create digital graphics. Participated in school competitions and collaborated on group projects.</p>
+    </div>
+
+    <div class="info-card reveal">
+      <h3>Junior High School – Science & Technology</h3>
+      <p>Graduated from <b>Buenaventura E. Fandialan Memorial Integrated National High School</b>. Studied fundamental concepts in science, mathematics, and computer basics. Developed problem-solving skills, critical thinking, and basic programming knowledge. Engaged in science fairs and hands-on experiments.</p>
+    </div>
+
+    <div class="info-card reveal">
+      <h3>Elementary School – General Education</h3>
+      <p>Graduated from <b>San Agustin Elementary School</b>. Built foundational skills in reading, writing, and problem-solving. Participated in school events, team activities, and early creative projects that shaped communication and teamwork skills.</p>
+    </div>
+</div>
+</section>
+
+
+<section class="piksurq reveal" id="piksurq">
+  <h2 class="piksurq-title">THIS IS RAINAH</h2>
+
+  <div class="piksurq-rotator  reveal">
+<div class="piksurq-ring">
+
+  <div class="piksurq-card reveal"><img src="woof.jpg"></div>
+  <div class="piksurq-card reveal"><img src="mask.jpg"></div>
+    <div class="piksurq-card reveal"><img src="mercury.jpg"></div>
+  <div class="piksurq-card reveal"><img src="close-up.jpg"></div>
+  <div class="piksurq-card reveal"><img src="mee.jpg"></div>
+  <div class="piksurq-card reveal"><img src="ehe.jpg"></div>
+  <div class="piksurq-card reveal"><img src="18.jpg"></div>
+  <div class="piksurq-card reveal"><img src="whitee.jpg"></div>
+  <div class="piksurq-card reveal"><img src="haha.jpg"></div>
+  <div class="piksurq-card reveal"><img src="award.jpg"></div>
+
+</div>
+
+  </div>
+</section>
+
+<section id="achievements" class="reveal">
+  <h2 class="section-title">Achievements & Activities</h2>
+
+  <div class="achievements-timeline">
+
+    <div class="achievement-item left">
+      <div class="achievement-card">
+        Completed multiple personal website projects using basic HTML and CSS
+      </div>
+    </div>
+
+    <div class="achievement-item right">
+      <div class="achievement-card">
+        Designed creative layouts and galleries for school and personal projects
+      </div>
+    </div>
+
+    <div class="achievement-item left">
+      <div class="achievement-card">
+        Finished Senior High School under the ICT strand
+      </div>
+    </div>
+
+    <div class="achievement-item right">
+      <div class="achievement-card">
+        Successfully collaborated in group projects and presentations
+      </div>
+    </div>
+
+    <div class="achievement-item left">
+      <div class="achievement-card">
+        Improved technical and creative skills through hands-on school activities
+      </div>
+    </div>
+
+    <div class="achievement-item right">
+      <div class="achievement-card">
+        Participated in school-related events and academic activities
+      </div>
+    </div>
+
+    <div class="achievement-item left">
+      <div class="achievement-card">
+        Balanced academics with extracurricular interests like board games
+      </div>
+    </div>
+
+    <div class="achievement-item right">
+      <div class="achievement-card">
+        Consistently met project deadlines and requirements
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<section id="extras" class="reveal extras-section">
+  <h2 class="section-title">Approach</h2>
+
+  <div class="extras-grid">
+    <div class="extra-card">
+        <img src="app1.png" alt="posang nakatayo" class="icon">
+      <p>I try things out and learn as I go.</p>
+    </div>
+
+    <div class="extra-card">
+      <img src="app1.png" alt="posang nakatayo" class="icon">
+      <p>I like keeping designs simple and easy to use.</p>
+    </div>
+
+    <div class="extra-card">
+      <img src="app1.png" alt="posang nakatayo" class="icon">
+      <p>I fix problems step by step without stressing too much.</p>
+    </div>
+
+    <div class="extra-card">
+      <img src="app1.png" alt="posang nakatayo" class="icon">
+      <p>I plan my projects but leave room to experiment.</p>
+    </div>
+
+    <div class="extra-card">
+      <img src="app1.png" alt="posang nakatayo" class="icon">    
+      <p>I make sure my work looks good on any screen.</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="reveal">
+  <h2 class="section-title">Contact</h2>
+
+  <div class="contact-wrapper reveal">
+    <div class="contact-form reveal">
+      <input type="text" placeholder="Your Name">
+      <input type="email" placeholder="Your Email">
+      <textarea rows="5" placeholder="Your Message"></textarea>
+      <button>Send Message</button>
+    </div>
+
+    <div class="socials reveal">
+      <div>Facebook: <a href="https://www.facebook.com/yourloverai" target="_blank"><b>Rainah Palaganas</b></a></div>
+      <div>Instagram: <a href="https://www.instagram.com/i.rainosaurus?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank"><b>@i.rainosaurus</b></a></div>
+      <div>Email: <b>0325-1250@lspu.edu.ph</b></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2025 Rainah Palaganas · My Portfolio
+</footer>
+
+<script>
+
+const reveals = document.querySelectorAll('.reveal');
+
+function handleScrollReveal() {
+  const windowHeight = window.innerHeight;
+
+  reveals.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    const top = rect.top;
+    const bottom = rect.bottom;
+
+    if (top < windowHeight - 100 && bottom > 100) {
+      section.classList.add('active');
+    } else {
+      section.classList.remove('active');
+    }
+  });const scrollRevealElements = document.querySelectorAll('.reveal');
+
+function handleScrollReveal() {
+  const triggerBottom = window.innerHeight * 0.85;
+
+  scrollRevealElements.forEach(el => {
+    const top = el.getBoundingClientRect().top;
+    if (top < triggerBottom) {
+      el.classList.add('show');
+    } else {
+      el.classList.remove('show');
+    }
+  });
+}
+
+window.addEventListener('scroll', handleScrollReveal);
+window.addEventListener('load', handleScrollReveal);
+}
+
+window.addEventListener('scroll', handleScrollReveal);
+window.addEventListener('load', handleScrollReveal);
+
+const ring = document.querySelector('.piksurq-ring');
+const cards = document.querySelectorAll('.piksurq-card');
+const totalCards = cards.length;
+const radius = 520;
+
+cards.forEach((card, index) => {
+  const angle = (360 / totalCards) * index;
+  card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+});
+
+let isDragging = false;
+let startX = 0;
+let rotation = 0;
+
+function pauseRing() { ring.style.animationPlayState = 'paused'; }
+function playRing() { ring.style.animationPlayState = 'running'; }
+
+ring.addEventListener('mouseenter', pauseRing);
+ring.addEventListener('mouseleave', () => { if (!isDragging) playRing(); });
+
+ring.addEventListener('mousedown', e => {
+  isDragging = true;
+  startX = e.pageX;
+  pauseRing();
+});
+
+window.addEventListener('mousemove', e => {
+  if (!isDragging) return;
+  const delta = e.pageX - startX;
+  rotation += delta * 0.35;
+  ring.style.transform = `rotateY(${rotation}deg)`;
+  startX = e.pageX;
+});
+
+window.addEventListener('mouseup', () => { isDragging = false; playRing(); });
+
+ring.addEventListener('touchstart', e => {
+  startX = e.touches[0].pageX;
+  isDragging = true;
+  pauseRing();
+});
+
+ring.addEventListener('touchmove', e => {
+  if (!isDragging) return;
+  const delta = e.touches[0].pageX - startX;
+  rotation += delta * 0.35;
+  ring.style.transform = `rotateY(${rotation}deg)`;
+  startX = e.touches[0].pageX;
+});
+
+ring.addEventListener('touchend', () => { isDragging = false; playRing(); });
+
+const panels = document.querySelectorAll('.ikotikot-wrapper');
+
+function handlePanelScroll() {
+  const windowHeight = window.innerHeight;
+
+  panels.forEach((panel, index) => {
+    const rect = panel.getBoundingClientRect();
+    const top = rect.top;
+    const bottom = rect.bottom;
+
+    if (bottom > 0 && top < windowHeight) {
+      panel.classList.add('show');
+    } else {
+      panel.classList.remove('show');
+    }
+  });
+}
+
+window.addEventListener('scroll', handlePanelScroll);
+window.addEventListener('load', handlePanelScroll);
+
+const data = [
+  { img: "101.jpg", acc: ["under101.jpg","under102.jpg","under103.jpg"], text: "Hi! I’m a graduate who believes that even small steps matter because they help me grow. I value hard work, creativity, and learning along the way. Graduating is one of my proudest achievements—it reminds me that patience and dedication are always worth it. I’m excited to continue growing, exploring new opportunities, and becoming a better version of myself." },
+  { img: "102.png", acc: ["cam102.png","cam101.png","cam103.png"], text: "I have a strong interest in photography and visual storytelling. Holding a camera allows me to capture moments, emotions, and details that often go unnoticed. Through photography, I express creativity and see the world from different perspectives. I prefer being behind the camera rather than in front of it." },
+  { img: "103.jpg", acc: ["prom2.jpg","under302.jpg","abtme1.jpg"], text: "I’m someone who loves celebrating life’s moments while staying true to myself. I enjoy expressing my style, having fun with friends, and embracing confidence in everything I do. I value positivity, creativity, and making the most out of every experience." },
+  { img: "reading1.png", acc: ["readme.png","readme3.jpg","readme2.png"], text: "I like reading books and manhwas in my free time. I enjoy getting into stories and taking a break from everything else. Reading helps me relax and keeps me interested, especially when I want some quiet time. It’s something I naturally enjoy and always come back to." },
+  { img: "blue.png", acc: ["smash.png","blue1.png","court1.png",], text: "I enjoy playing badminton and spending time on the court, especially when I need to clear my mind. I’m not always serious, but I like pushing myself and improving at my own pace. Staying active helps me stay balanced and focused. I appreciate simple routines, small progress, and doing things I genuinely enjoy." },
+  { img: "mencat.png", acc: ["cat1.png","cat2.png","cat3.png"], text: "I like cats and feel comfortable being around them. I enjoy simple moments and quiet company more than loud or crowded settings. I’m not very flashy, and I prefer things that feel natural and relaxed. Being with cats helps me unwind and stay calm. I appreciate small, everyday moments and being able to just be myself." }
+];
+
+let index = 0;
+const left = document.getElementById("left");
+const center = document.getElementById("center");
+const right = document.getElementById("right");
+const details = document.getElementById("details");
+
+function render() {
+  const l = (index - 1 + data.length) % data.length;
+  const c = index;
+  const r = (index + 1) % data.length;
+
+  left.innerHTML = `<img src="${data[l].img}">`;
+  center.innerHTML = `<img src="${data[c].img}">`;
+  right.innerHTML = `<img src="${data[r].img}">`;
+
+  left.className = "card side left-pos";
+  center.className = "card center";
+  right.className = "card side right-pos";
+
+  document.getElementById("a1").src = data[c].acc[0];
+  document.getElementById("a2").src = data[c].acc[1];
+  document.getElementById("a3").src = data[c].acc[2];
+  document.getElementById("text").innerHTML = `<h3>THIS IS RAIIII</h3><p>${data[c].text}</p>`;
+
+  details.classList.add("active");
+}
+
+let isMoving = false;
+function move(dir) {
+  if (isMoving) return;
+  isMoving = true;
+
+  const ikotikot = document.querySelector(".ikotikot");
+  const shift = dir * (260 + 60);
+
+  ikotikot.style.transition = "transform 0.5s ease";
+  ikotikot.style.transform = `translateX(${-shift}px)`;
+
+  setTimeout(() => {
+    index = (index + dir + data.length) % data.length;
+    render();
+    ikotikot.style.transition = "none";
+    ikotikot.style.transform = "translateX(0)";
+    isMoving = false;
+  }, 500);
+}
+
+render();
+</script>
+
+</html>

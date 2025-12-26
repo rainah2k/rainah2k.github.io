@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Harmonia Guardians - Hard Mode</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #game-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            max-width: 900px;
+            width: 90%;
+            border: 3px solid #FF69B4;
+        }
+        #hangman-image {
+            width: 40%;
+        }
+        #hangman-image img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        #game-info {
+            width: 60%;
+            padding-left: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #FF69B4;
+        }
+        #word-display {
+            font-size: 32px;
+            letter-spacing: 7px;
+            margin: 20px 0;
+        }
+        #lyrics {
+            font-style: italic;
+            color: #333;
+        }
+        #hint {
+            margin: 15px 0;
+            color: #FF69B4;
+            font-weight: bold;
+        }
+        #timer {
+            color: red;
+            font-weight: bold;
+        }
+        #incorrect-guesses {
+            color: red;
+        }
+        #letters {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+        button {
+            background: #FF69B4;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #FF1493;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ff5e62;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+            background: #ff3c41;
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        #dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 300px;
+            border: 3px solid #FF69B4;
+        }
+        #dialog img {
+            width: 100px;
+            margin-bottom: 15px;
+        }
+        #dialog-buttons button {
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="back-button" onclick="location.href='RHYTHM.html'">Back</button>
+
+    <div id="game-container">
+        <div id="hangman-image">
+            <img id="hangman-pic" src="s1.png" alt="Hangman">
+        </div>
+        <div id="game-info">
+            <h1>Guess the Missing Word</h1>
+            <div id="word-display"></div>
+            <p id="lyrics"></p>
+            <div id="hint"></div>
+            <div>Timer: <span id="timer">30</span>s</div>
+            <div>Incorrect guesses: <span id="incorrect-guesses">0</span>/3</div>
+            <div id="letters"></div>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+    <div id="dialog">
+        <img id="dialog-img" src="" alt="Result">
+        <div id="dialog-buttons">
+            <button onclick="window.location.href='RHYTHM.html'">Back</button>
+           <button id="continue-btn" onclick="continueGame()">Continue</button>
+
+            <button id="retry-btn" onclick="continueGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        const lyrics = [
+            { lyric: "Just a small town girl, livin' in a ______ world", word: "LONELY", hint: "Don't Stop Believin' by Journey" },
+            { lyric: "No, I don't wanna fall in love, if you don't wanna try\nBut all that I've been ______, is maybe that you mind", word: "THINKING", hint: "Tenerife Sea by Ed Sheeran" },
+            { lyric: "But I set fire to the ______, watched it pour as I touched your face", word: "RAIN", hint: "Set Fire to the Rain by Adele" },
+            { lyric: "I'm off the deep end, watch as I ______", word: "DIVE", hint: "Shallow by Lady Gaga & Bradley Cooper" },
+            { lyric: "Isn't it lovely, all alone? Heart made of glass, my mind of ______", word: "STONE", hint: "Lovely by Billie Eilish & Khalid" }
+        ];
+
+        const images = ["s1.png", "s2.png", "s3.png", "s4.png"];
+        let selectedLyric, missingWord, guessedLetters, wrongGuesses, timer, timeLeft;
+
+        function startGame() {
+            const randomLyric = lyrics[Math.floor(Math.random() * lyrics.length)];
+            selectedLyric = randomLyric.lyric;
+            missingWord = randomLyric.word.toUpperCase();
+            guessedLetters = [];
+            wrongGuesses = 0;
+            timeLeft = 30;
+
+            document.getElementById('hangman-pic').src = images[0];
+            document.getElementById('lyrics').textContent = selectedLyric;
+            document.getElementById('hint').textContent = "Hint: " + randomLyric.hint;
+            document.getElementById('incorrect-guesses').textContent = wrongGuesses;
+            updateDisplay();
+            createLetters();
+            startTimer();
+        }
+
+        function createLetters() {
+            const lettersDiv = document.getElementById('letters');
+            lettersDiv.innerHTML = '';
+            for (let i = 65; i <= 90; i++) {
+                const letter = String.fromCharCode(i);
+                const button = document.createElement('button');
+                button.textContent = letter;
+                button.onclick = () => guessLetter(letter, button);
+                lettersDiv.appendChild(button);
+            }
+        }
+
+        function guessLetter(letter, button) {
+            button.disabled = true;
+            if (missingWord.includes(letter)) {
+                guessedLetters.push(letter);
+            } else {
+                wrongGuesses++;
+                document.getElementById('hangman-pic').src = images[Math.min(wrongGuesses, images.length - 1)];
+            }
+            document.getElementById('incorrect-guesses').textContent = wrongGuesses;
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            const displayWord = missingWord.split('').map(letter => guessedLetters.includes(letter) ? letter : '_').join(' ');
+            document.getElementById('word-display').textContent = displayWord;
+
+            if (!displayWord.includes('_')) showDialog("yay.png", true);
+            else if (wrongGuesses >= 3 || timeLeft <= 0) showDialog("bleh.png", false);
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                document.getElementById('timer').textContent = --timeLeft;
+                if (timeLeft <= 0) updateDisplay();
+            }, 1000);
+        }
+
+        function showDialog(img, isCorrect) {
+    clearInterval(timer);
+    document.getElementById('dialog-img').src = img;
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('dialog').style.display = 'block';
+
+    // Show buttons based on result
+    document.getElementById('continue-btn').style.display = isCorrect ? 'inline-block' : 'none';
+    document.getElementById('retry-btn').style.display = isCorrect ? 'none' : 'inline-block';
+}
+
+// Fix: Hide dialog when continuing
+function continueGame() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('dialog').style.display = 'none';
+    startGame();  // Reset the game or move to the next round
+}
+
+
+        startGame();
+    </script>
+</body>
+</html>

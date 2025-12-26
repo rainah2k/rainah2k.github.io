@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Quiz Game</title>
+    <style>
+        /* General Styling */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background: url('pebg.jpg') no-repeat center center/cover;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+        }
+
+        .game-container {
+            display: flex;
+            max-width: 1000px;
+            width: 90%;
+            background: #FFECB3;
+            border: 5px solid #FFAB91;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Left Side (Image) */
+        .left-side {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #FFD3B6;
+            flex-direction: column;
+        }
+
+        #art-image {
+            max-width: 100%;
+            max-height: 300px;
+            border: 3px solid #FFAB91;
+            border-radius: 8px;
+        }
+
+        /* Right Side (Question and Choices) */
+        .right-side {
+            flex: 1.5;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        #question {
+            font-size: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Timer */
+        #timer-bar {
+            width: 100%;
+            height: 15px;
+            background: #FFD3B6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #timer-progress {
+            height: 100%;
+            background: #FF6F61;
+            border-radius: 8px;
+            transition: width 0.1s linear;
+        }
+
+        /* Choices */
+        .choices-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .choice-btn {
+            background: #FFD3B6;
+            border: 2px solid #FFAB91;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 18px;
+            color: #333;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .choice-btn:hover {
+            background: #FFAB91;
+            color: white;
+        }
+
+        /* Shake Effect */
+        .shake {
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+        }
+
+        /* Game Over */
+        #game-over {
+            display: none;
+            text-align: center;
+        }
+
+        #game-over h1 {
+            color: #FF6F61;
+        }
+
+        #game-over button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #FFAB91;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            margin: 5px;
+        }
+
+        /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ff87a1; /* Pastel Yellow */
+            color: #000; /* Black text */
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+            background: #ffaffb; /* Lighter pastel yellow on hover */
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="location.href='quickstrike.html'">Back</button>
+
+    <div class="game-container">
+        <!-- Left Side: Image -->
+        <div class="left-side">
+            <img id="art-image" src="" alt="Athlete">
+        </div>
+
+        <!-- Right Side: Question, Choices, Timer -->
+        <div class="right-side">
+            <div id="timer-bar">
+                <div id="timer-progress"></div>
+            </div>
+
+            <div id="question">What is the profession of this athlete?</div>
+
+            <div class="choices-container" id="choices-container"></div>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over">
+        <h1>Game Over!</h1>
+        <p id="final-score"></p>
+        <button onclick="window.location.reload()">Play Again</button>
+    </div>
+
+    <script>
+    const artworks = [
+    { image: "serena.jpg", correctAnswer: "Tennis Player", options: ["Football Player", "Basketball Player", "Golf", "Tennis Player"] },
+        { image: "ronaldo.jpg", correctAnswer: "Football Player", options: ["Basketball Player", "Tennis Player", "Cricketer", "Football Player"] },
+        { image: "jordan.jpg", correctAnswer: "Basketball Player", options: ["Football Player", "Tennis Player", "Athlete", "Basketball Player"] },
+        { image: "messi.jpg", correctAnswer: "Football Player", options: ["Basketball Player", "Golf", "Tennis Player", "Football Player"] },
+        { image: "roger.jpg", correctAnswer: "Tennis Player", options: ["Football Player", "Boxer", "Golfer", "Tennis Player"] }
+    ];
+
+    let score = 0;
+    let currentArtwork;
+    let timer;
+
+    function startGame() {
+        nextArtwork();
+    }
+
+    function nextArtwork() {
+        if (artworks.length === 0) {
+            document.querySelector(".game-container").style.display = "none";
+            document.getElementById("game-over").style.display = "block";
+            document.getElementById("final-score").textContent = `Score: ${score}`;
+            return;
+        }
+
+        currentArtwork = artworks.pop();
+        document.getElementById("art-image").src = currentArtwork.image;
+
+        loadChoices();
+        startTimer();
+    }
+
+    function loadChoices() {
+        const choicesContainer = document.getElementById("choices-container");
+        choicesContainer.innerHTML = "";
+
+        const options = currentArtwork.options.sort(() => Math.random() - 0.5);
+
+        options.forEach(option => {
+            const btn = document.createElement("button");
+            btn.classList.add("choice-btn");
+            btn.textContent = option;
+            btn.onclick = () => checkAnswer(btn, option);
+            choicesContainer.appendChild(btn);
+        });
+    }
+
+    function startTimer() {
+        const timerProgress = document.getElementById("timer-progress");
+        timerProgress.style.transition = "none";
+        timerProgress.style.width = "100%";
+
+        setTimeout(() => {
+            timerProgress.style.transition = "width 10s linear";
+            timerProgress.style.width = "0%";
+        }, 100);
+
+        timer = setTimeout(() => {
+            nextArtwork();
+        }, 10000);
+    }
+
+    function checkAnswer(button, selected) {
+        clearTimeout(timer);
+
+        // Compare selected answer to the correct one
+        if (selected === currentArtwork.correctAnswer) {
+            button.style.background = "#A5D6A7"; // Green for correct answer
+            score++;
+        } else {
+            button.style.background = "#EF5350"; // Red for wrong answer
+            button.classList.add("shake"); // Add shake effect
+        }
+
+        setTimeout(nextArtwork, 1000);
+    }
+
+    startGame();
+</script>
+
+</body>
+</html>

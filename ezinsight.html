@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arts Quiz Game</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background: #FFF9C4;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Game container */
+        #game-container {
+            display: grid;
+            grid-template-columns: repeat(5, 100px);
+            grid-gap: 12px;
+            padding: 20px;
+            background: #FFECB3;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Card styling */
+        .card {
+            width: 100px;
+            height: 150px;
+            border-radius: 15px;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .card.disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Correct & Wrong Effects */
+        .card.correct {
+            background: #A5D6A7 !important;
+        }
+
+        .card.wrong {
+            background: #EF9A9A !important;
+        }
+
+        /* Dialog message */
+        #question-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #FFF8E1;
+            border: 2px solid #FFCC80;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            text-align: center;
+            z-index: 100;
+            transition: background 0.3s;
+        }
+
+        /* Button styles */
+        button {
+            background: #FFD54F;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #FFCA28;
+        }
+
+        /* Timer */
+        #timer {
+            color: #D32F2F;
+            font-weight: bold;
+        }
+
+        /* Result Box */
+        #result-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #FFECB3;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+         /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #FFF9C4; /* Pastel Yellow */
+            color: #000; /* Black text */
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+            background: #FFECB3; /* Lighter pastel yellow on hover */
+        }
+        
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="location.href='insight.html'">Back</button>
+    
+    <div id="game-container"></div>
+
+    <div id="question-dialog">
+        <p id="question-text"></p>
+        <div id="answers"></div>
+        <p>Time Left: <span id="timer">10</span>s</p>
+    </div>
+
+    <div id="result-box">
+        <h2 id="final-score"></h2>
+        <button onclick="location.reload()">Try Again</button>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "Who painted the Mona Lisa?", a: ["Leonardo da Vinci", "Michelangelo", "Van Gogh"], correct: 0 },
+            { q: "Is Cubism an art movement?", a: ["Yes", "No"], correct: 0 },
+            { q: "The Starry Night was painted by Picasso.", a: ["True", "False"], correct: 1 },
+            { q: "Which country is known for Origami?", a: ["China", "Japan", "Korea"], correct: 1 },
+            { q: "Is Impressionism an art style?", a: ["Yes", "No"], correct: 0 },
+            { q: "Did Salvador Dali paint surreal art?", a: ["Yes", "No"], correct: 0 },
+            { q: "Is the Sistine Chapel painted by Da Vinci?", a: ["Yes", "No"], correct: 1 },
+            { q: "What is the art of paper folding called?", a: ["Origami", "Papier-mâché", "Kirigami"], correct: 0 },
+            { q: "Is Abstract art focused on realism?", a: ["Yes", "No"], correct: 1 },
+            { q: "Who painted The Persistence of Memory?", a: ["Monet", "Dali", "Picasso"], correct: 1 }
+        ];
+
+        const gameContainer = document.getElementById('game-container');
+        const questionDialog = document.getElementById('question-dialog');
+        const questionText = document.getElementById('question-text');
+        const answersDiv = document.getElementById('answers');
+        const timerSpan = document.getElementById('timer');
+        const resultBox = document.getElementById('result-box');
+        const finalScore = document.getElementById('final-score');
+
+        let score = 0;
+        let answered = 0;
+        let timer;
+        let timeLeft;
+
+        function startGame() {
+            for (let i = 0; i < 10; i++) {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.style.backgroundImage = `url('card${i + 1}.jpg')`;
+                card.onclick = () => showQuestion(i, card);
+                gameContainer.appendChild(card);
+            }
+        }
+
+        function showQuestion(index, card) {
+            questionText.textContent = questions[index].q;
+            answersDiv.innerHTML = '';
+            questionDialog.style.display = 'block';
+            
+            questions[index].a.forEach((answer, i) => {
+                const button = document.createElement('button');
+                button.textContent = answer;
+                button.onclick = () => checkAnswer(i, questions[index].correct, card);
+                answersDiv.appendChild(button);
+            });
+
+            timeLeft = 10;
+            timerSpan.textContent = timeLeft;
+            timer = setInterval(() => {
+                timeLeft--;
+                timerSpan.textContent = timeLeft;
+                if (timeLeft === 0) checkAnswer(-1, questions[index].correct, card);
+            }, 1000);
+        }
+
+        function checkAnswer(selected, correct, card) {
+            clearInterval(timer);
+            answered++;
+            card.classList.add(selected === correct ? 'correct' : 'wrong');
+            card.classList.add('disabled');
+            if (selected === correct) score++;
+            if (answered === 10) showResult();
+            questionDialog.style.display = 'none';
+        }
+
+        function showResult() {
+            finalScore.textContent = `Score: ${score} / 10`;
+            resultBox.style.display = 'block';
+        }
+
+        startGame();
+    </script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Color Mixing Game - Medium Level</title>
+    <style>
+        /* Body and Game Container */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #FFF9C4;
+        }
+
+        .game-container {
+            background: #FFFDE7;
+            border: 3px solid #FFECB3;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            transition: 0.2s ease;
+        }
+
+        /* Score and Lives */
+        #score, #lives {
+            color: #FBC02D;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        /* Timer Bar */
+        #timer-bar-container {
+            width: 100%;
+            height: 20px;
+            background: #FFE0B2;
+            border: 2px solid #FFD54F;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        #timer-bar {
+            height: 100%;
+            background: #FBC02D;
+            width: 100%;
+            transition: width linear;
+        }
+
+        /* Flexbox for Alignment */
+        .color-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        /* Color Boxes and Result */
+        .color-box, .result-box {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #FFD54F;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #FFF9C4;
+            font-size: 40px;
+            color: #FBC02D;
+            transition: background 0.3s ease;
+        }
+
+        /* Choices */
+        .choices {
+            margin-top: 20px;
+        }
+
+        .choice-btn {
+            background: #FFF59D;
+            border: 2px solid #FFD54F;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .choice-btn:hover {
+            background: #FFECB3;
+        }
+
+        /* Red Flash and Shake Animation */
+        .wrong {
+            background: #FFCDD2 !important;
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+        }
+
+        /* End Screen */
+        #end-screen {
+            display: none;
+            text-align: center;
+            color: #FBC02D;
+        }
+
+        #play-again {
+            background: #FFF59D;
+            border: 2px solid #FFD54F;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        #play-again:hover {
+            background: #FFECB3;
+        }
+      /* Back Button */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #FFD700; /* Gold */
+    color: #000; /* Black text for contrast */
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.back-button:hover {
+    background: #FFEA70; /* Lighter yellow on hover */
+}
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="location.href='chromatic.html'">Back</button>
+    <div class="game-container" id="game-container">
+        <h1 style="color: #FBC02D;">Color Mixing Game - Medium</h1>
+        <div id="score">Score: 0</div>
+        <div id="lives">Lives: ❤️❤️❤️</div>
+
+        <!-- Timer Bar -->
+        <div id="timer-bar-container">
+            <div id="timer-bar"></div>
+        </div>
+
+        <div class="color-row">
+            <div id="color1" class="color-box"></div>
+            <span style="font-size: 40px; color: #FBC02D;">+</span>
+            <div id="color2" class="color-box"></div>
+            <span style="font-size: 40px; color: #FBC02D;">=</span>
+            <div id="result-color" class="result-box">?</div>
+        </div>
+        <div class="choices"></div>
+    </div>
+
+    <div id="end-screen">
+        <h1>Game Over!</h1>
+        <p id="final-score"></p>
+        <button id="play-again" onclick="restartGame()">Play Again</button>
+    </div>
+
+<script>
+    const colorCombinations = [
+        { color1: "red", color2: "blue", result: "Purple" },
+        { color1: "red", color2: "yellow", result: "Orange" },
+        { color1: "blue", color2: "yellow", result: "Green" }
+    ];
+
+    const allColors = ["Purple", "Orange", "Green", "Pink", "Brown", "Black"];
+
+    let currentCombo;
+    let score = 0;
+    let lives = 3;
+    let timer;
+
+    function loadNewLevel() {
+        if (lives === 0) {
+            showEndScreen();
+            return;
+        }
+
+        currentCombo = colorCombinations[Math.floor(Math.random() * colorCombinations.length)];
+
+        document.getElementById('color1').style.background = currentCombo.color1;
+        document.getElementById('color2').style.background = currentCombo.color2;
+
+        const resultBox = document.getElementById('result-color');
+        resultBox.style.background = "#FFF9C4";
+        resultBox.textContent = "?";
+
+        // Randomize choices
+        const choicesContainer = document.querySelector(".choices");
+        choicesContainer.innerHTML = "";
+
+        let choices = new Set();
+        choices.add(currentCombo.result);
+        while (choices.size < 3) {
+            choices.add(allColors[Math.floor(Math.random() * allColors.length)]);
+        }
+
+        Array.from(choices).sort(() => Math.random() - 0.5).forEach(choice => {
+            const btn = document.createElement("button");
+            btn.className = "choice-btn";
+            btn.textContent = choice;
+            btn.onclick = () => checkAnswer(btn);
+            choicesContainer.appendChild(btn);
+        });
+
+        // Update score, lives, and start the timer
+        document.getElementById('score').textContent = `Score: ${score}`;
+        document.getElementById('lives').textContent = `Lives: ${'❤️'.repeat(Math.max(lives, 0))}`;
+        startTimer();
+    }
+
+    function checkAnswer(button) {
+        clearTimeout(timer);
+
+        const resultBox = document.getElementById('result-color');
+
+        if (button.textContent === currentCombo.result) {
+            score++;
+            resultBox.style.background = currentCombo.result.toLowerCase();
+            resultBox.textContent = '';
+        } else {
+            lives--;
+            button.classList.add('wrong');
+            setTimeout(() => button.classList.remove('wrong'), 500);
+        }
+
+        setTimeout(loadNewLevel, 1000);
+    }
+
+    function startTimer() {
+        const timerBar = document.getElementById('timer-bar');
+        timerBar.style.transition = 'none';
+        timerBar.style.width = '100%';
+
+        setTimeout(() => {
+            timerBar.style.transition = 'width 5s linear';
+            timerBar.style.width = '0%';
+        }, 50);
+
+        timer = setTimeout(() => {
+            lives--;
+            loadNewLevel();
+        }, 5000);
+    }
+
+    function showEndScreen() {
+        document.getElementById('game-container').style.display = 'none';
+        document.getElementById('end-screen').style.display = 'block';
+        document.getElementById('final-score').textContent = `Your Score: ${score}`;
+    }
+
+    function restartGame() {
+        score = 0;
+        lives = 3;
+        document.getElementById('end-screen').style.display = 'none';
+        document.getElementById('game-container').style.display = 'block';
+        loadNewLevel();
+    }
+
+    // Initialize game
+    loadNewLevel();
+</script>
+
+</body>
+</html>

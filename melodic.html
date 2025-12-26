@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Art Guessing Game</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #F9E79F; /* Pastel yellow shade */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Game Container */
+        #game-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            max-width: 800px;
+            width: 90%;
+            border: 3px solid #FFB84D;
+        }
+
+        #image-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #image-container img {
+            width: 70%;
+            border-radius: 10px;
+        }
+
+        #letters-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .letter-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .letter {
+            background-color: #FFB84D;
+            color: white;
+            padding: 10px;
+            font-size: 22px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s ease-in-out;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .letter:hover {
+            background-color: #FF9A3D;
+        }
+
+        .shaking {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(10px); }
+        }
+
+        .incorrect {
+            background-color: red;
+        }
+
+        .correct {
+            background-color: #4CAF50;
+        }
+
+        .used {
+            background-color: grey;
+            pointer-events: none;
+        }
+
+       /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #FFF9C4; /* Pastel Yellow */
+            color: #000; /* Black text */
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+            background: #FFECB3; /* Lighter pastel yellow on hover */
+        }
+
+        /* Display Word */
+        #display-word {
+            font-size: 28px;
+            font-weight: bold;
+            color: #FF9A3D;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="back-button" onclick="location.href='clues.html'">Back</button>
+
+    <div id="game-container">
+        <div id="image-container">
+            <img id="art-image" src="collage.png" alt="Art Guess">
+        </div>
+        <div id="letters-container"></div>
+        <div id="display-word">_ _ _ _ _ _ _ _ _ _</div> <!-- This shows the word progress -->
+    </div>
+
+    <script>
+        const artImages = [
+            { src: 'collage.png', word: 'COLLAGE' },
+            { src: 'mosaic.png', word: 'MOSAIC' },
+            { src: 'painting.png', word: 'PAINTING' },
+            { src: 'sculpture.png', word: 'SCULPTURE' },
+            { src: 'pottery.png', word: 'POTTERY' },
+            { src: 'graffiti.png', word: 'GRAFFITI' },
+            { src: 'calligraphy.png', word: 'CALLIGRAPHY' },
+            { src: 'origami.png', word: 'ORIGAMI' },
+            { src: 'theatre.png', word: 'THEATRE' },
+            { src: 'photography.png', word: 'PHOTOGRAPHY' }
+        ];
+
+        let selectedArt, wordToGuess, userInput, letterSlots;
+
+        function startGame() {
+            // Reset the game state
+            const randomIndex = Math.floor(Math.random() * artImages.length);
+            selectedArt = artImages.splice(randomIndex, 1)[0]; // Remove the used image
+            wordToGuess = selectedArt.word.toUpperCase();
+            userInput = [];
+            letterSlots = [];
+
+            // Prepare the image and word layout
+            document.getElementById('art-image').src = selectedArt.src;
+            createLetterRows();
+            document.getElementById('display-word').textContent = '_ '.repeat(wordToGuess.length).trim();
+        }
+
+        function createLetterRows() {
+            const lettersContainer = document.getElementById('letters-container');
+            lettersContainer.innerHTML = '';
+
+            const letters = wordToGuess.split('');
+            const shuffledLetters = shuffleLetters(letters);
+
+            // Create two rows of letters
+            const row1 = shuffledLetters.slice(0, 5);
+            const row2 = shuffledLetters.slice(5, 11);
+
+            createLetterRow(row1);
+            createLetterRow(row2);
+        }
+
+        function createLetterRow(row) {
+            const letterRow = document.createElement('div');
+            letterRow.classList.add('letter-row');
+            row.forEach(letter => {
+                const letterButton = document.createElement('div');
+                letterButton.classList.add('letter');
+                letterButton.textContent = letter;
+                letterButton.onclick = () => handleLetterClick(letter, letterButton);
+                letterRow.appendChild(letterButton);
+            });
+            document.getElementById('letters-container').appendChild(letterRow);
+        }
+
+        function handleLetterClick(letter, button) {
+            if (userInput.length < wordToGuess.length && !button.classList.contains('used')) {
+                userInput.push(letter);
+                updateInputDisplay();
+
+                button.classList.add('used');  // Mark letter as used
+                button.style.pointerEvents = 'none';  // Disable button after click
+
+                if (userInput.join('') === wordToGuess) {
+                    setTimeout(() => {
+                        if (artImages.length > 0) {
+                            startGame();  // Proceed to next word if available
+                        } else {
+                            alert('You completed the game!');
+                        }
+                    }, 500);
+                }
+            } else {
+                button.classList.add('shaking');
+                setTimeout(() => button.classList.remove('shaking'), 300);
+                button.classList.add('incorrect');
+                setTimeout(() => button.classList.remove('incorrect'), 1000);
+            }
+        }
+
+        function updateInputDisplay() {
+            const displayWord = wordToGuess.split('').map((letter, index) => {
+                return userInput[index] || '_';
+            }).join(' ');
+
+            document.getElementById('display-word').textContent = displayWord;
+
+            // Check if all letters are used
+            if (userInput.length === wordToGuess.length) {
+                setTimeout(() => {
+                    resetGame();  // Reset the game after a short delay
+                }, 1000);  // Delay to let the user see the completed word
+            }
+        }
+
+        function resetGame() {
+            // Reset user input and word display
+            userInput = [];
+            letterSlots = [];
+            document.getElementById('display-word').textContent = '_ '.repeat(wordToGuess.length).trim();
+            createLetterRows();  // Create new letter buttons for the new word
+        }
+
+        function shuffleLetters(letters) {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let shuffledLetters = [...letters];
+
+            // Add random letters to the pool
+            while (shuffledLetters.length < 10) {
+                shuffledLetters.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
+            }
+
+            // Shuffle the array
+            for (let i = shuffledLetters.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledLetters[i], shuffledLetters[j]] = [shuffledLetters[j], shuffledLetters[i]];
+            }
+
+            return shuffledLetters;
+        }
+
+        startGame();
+    </script>
+</body>
+</html>

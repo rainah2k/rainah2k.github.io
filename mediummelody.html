@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Medium Level - Note Identification</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom right, #ffd1dc, #ffb6c1);
+            font-family: Arial, sans-serif;
+        }
+        .game-container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        #score-lives {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 20px;
+            color: #ff69b4;
+        }
+        #note-container {
+            width: 220px;
+            height: 220px;
+            border: 4px dashed #ff69b4;
+            margin: 20px auto;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+        }
+        #note-container img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        #note-name {
+            font-size: 28px;
+            color: #ff69b4;
+            margin: 15px 0;
+        }
+        .note-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .note-buttons img {
+            width: 90px;
+            height: 90px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: transform 0.1s, background-color 0.2s;
+        }
+        .note-buttons img.wrong {
+            animation: shake 0.2s;
+            background-color: #ff4d4d;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+        }
+        /* Smooth Timer Progress Bar */
+        #timer-container {
+            width: 100%;
+            height: 20px;
+            background: #ff69b4;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        #timer-bar {
+            width: 100%;
+            height: 100%;
+            background: #4caf50;
+            transition: width linear;
+        }
+        /* Dialog Message */
+        #game-over-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 10;
+        }
+        #game-over-dialog img {
+            width: 150px;
+            margin-bottom: 15px;
+        }
+        #game-over-dialog button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            background: #ff69b4;
+        }
+        
+        /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ff5e62;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+            background: #ff3c41;
+        }
+    </style>
+</head>
+<body>
+    
+    <button class="back-button" onclick="location.href='melody.html'">Back</button>    
+    
+    <div class="game-container">
+        <div id="score-lives">
+            <div>Score: <span id="score">0</span></div>
+            <div>Lives: <span id="lives">3</span></div>
+        </div>
+        <div id="note-container"></div>
+        <div id="note-name"></div>
+        <div class="note-buttons" id="note-buttons"></div>
+        <div id="timer-container">
+            <div id="timer-bar"></div>
+        </div>
+    </div>
+
+    <!-- Game Over Dialog -->
+    <div id="game-over-dialog">
+        <img src="sosad.jpg" alt="Game Over">
+        <h2>Game Over</h2>
+        <p>Your Score: <span id="final-score"></span></p>
+        <button onclick="window.location.reload()">Play Again</button>
+        <button onclick="window.location.href = 'musicgame.html'">Back</button>
+    </div>
+
+    <script>
+        const notes = [
+            { name: "Flat", img: "flat.png" },
+            { name: "Sharp", img: "sharp.png" },
+            { name: "Double Sharp", img: "doublesharp.png" },
+            { name: "Double Flat", img: "doubleflat.png" },
+            { name: "Fermata", img: "fermata.png" }
+        ];
+
+        let score = 0;
+        let lives = 3;
+        let timer;
+        const totalTime = 5000; // 5 seconds in milliseconds
+
+        function newRound() {
+            if (lives <= 0) {
+                showGameOver();
+                return;
+            }
+
+            const noteContainer = document.getElementById("note-container");
+            const noteName = document.getElementById("note-name");
+            const noteButtons = document.getElementById("note-buttons");
+            const timerBar = document.getElementById("timer-bar");
+
+            // Pick a random correct note
+            const correctNote = notes[Math.floor(Math.random() * notes.length)];
+            noteContainer.innerHTML = "";
+            noteName.textContent = correctNote.name;
+
+            // Pick 2 random wrong notes and shuffle with correct note
+            const shuffledNotes = notes
+                .filter(note => note !== correctNote)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 2);
+            shuffledNotes.push(correctNote);
+            shuffledNotes.sort(() => 0.5 - Math.random());
+
+            // Display buttons
+            noteButtons.innerHTML = "";
+            shuffledNotes.forEach(note => {
+                const btn = document.createElement("img");
+                btn.src = note.img;
+                btn.alt = note.name;
+                btn.onclick = () => checkAnswer(note, correctNote);
+                noteButtons.appendChild(btn);
+            });
+
+            // Reset and start smooth timer
+            clearInterval(timer);
+            timerBar.style.transition = "none";
+            timerBar.style.width = "100%";
+            setTimeout(() => {
+                timerBar.style.transition = `width ${totalTime}ms linear`;
+                timerBar.style.width = "0%";
+            }, 50);
+
+            timer = setTimeout(() => {
+                newRound();
+            }, totalTime);
+        }
+
+        function checkAnswer(selectedNote, correctNote) {
+            const noteContainer = document.getElementById("note-container");
+            if (selectedNote === correctNote) {
+                noteContainer.innerHTML = `<img src="${selectedNote.img}" alt="${selectedNote.name}">`;
+                score++;
+                document.getElementById("score").textContent = score;
+                clearTimeout(timer);
+                newRound();
+            } else {
+                lives--;
+                document.getElementById("lives").textContent = lives;
+
+                const wrongBtn = [...document.querySelectorAll("img")].find(btn => btn.src.includes(selectedNote.img));
+                wrongBtn.classList.add("wrong");
+                setTimeout(() => wrongBtn.classList.remove("wrong"), 500);
+
+                if (lives <= 0) {
+                    showGameOver();
+                }
+            }
+        }
+
+        function showGameOver() {
+            clearTimeout(timer);
+            document.getElementById("final-score").textContent = score;
+            document.getElementById("game-over-dialog").style.display = "block";
+        }
+
+        newRound();
+    </script>
+</body>
+</html>

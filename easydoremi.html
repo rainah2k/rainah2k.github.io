@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pink Aesthetic Piano</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ffd1dc, #ffdde1);
+            font-family: Arial, sans-serif;
+        }
+        .piano-container {
+            display: flex;
+            align-items: flex-start;
+            background: #ffc0cb;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            gap: 3px;
+        }
+        .key {
+            width: 80px;
+            height: 300px;
+            border: 2px solid #ff91a4;
+            border-radius: 5px;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        }
+        .key:active {
+            transform: scale(0.95);
+        }
+        /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ff5e62;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .back-button:hover {
+            background: #ff3c41;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="location.href='doremi.html'">Back</button>
+    <div class="piano-container">
+        <div class="key" onclick="playNote('do')" style="background-image: url('do.png');"></div>
+        <div class="key" onclick="playNote('re')" style="background-image: url('re.png');"></div>
+        <div class="key" onclick="playNote('mi')" style="background-image: url('mi.png');"></div>
+        <div class="key" onclick="playNote('fa')" style="background-image: url('fa.png');"></div>
+        <div class="key" onclick="playNote('sol')" style="background-image: url('sol.png');"></div>
+        <div class="key" onclick="playNote('la')" style="background-image: url('la.png');"></div>
+        <div class="key" onclick="playNote('ti')" style="background-image: url('ti.png');"></div>
+        <div class="key" onclick="playNote('doo')" style="background-image: url('doo.png');"></div>
+    </div>
+
+    <script>
+        function playNote(note) {
+            const audio = new Audio(note + '.mp3');
+            audio.play();
+        }
+
+    </script>
+</body>
+</html>

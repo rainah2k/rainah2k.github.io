@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Art Movement - Medium Level</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            background: #FFF9C4;
+        }
+        .game-container {
+            text-align: center;
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+        #timer-bar-container {
+            width: 100%;
+            height: 20px;
+            background: #FFECB3;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        #timer-bar {
+            width: 100%;
+            height: 100%;
+            background: #FF80AB;
+            transition: width 0.1s linear;
+        }
+        #image {
+            max-width: 80%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        #question {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        #answer-lines {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        .line {
+            width: 30px;
+            height: 40px;
+            margin: 0 5px;
+            border-bottom: 2px solid #333;
+            font-size: 24px;
+            text-align: center;
+        }
+        #jumbled-letters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .letter {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            background: #FFECB3;
+            color: #333;
+            border: 1px solid #BCAAA4;
+            border-radius: 5px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .letter:disabled {
+            background: #BDBDBD;
+            cursor: not-allowed;
+        }
+        /* Game Over Tab */
+        #game-over-tab {
+            display: none;
+            text-align: center;
+            background: #FFF3E0;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        #score {
+            font-size: 24px;
+            color: #FF80AB;
+        }
+        #play-again-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #FF80AB;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+         /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #FFF9C4; /* Pastel Yellow */
+            color: #000; /* Black text */
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+            background: #FFECB3; /* Lighter pastel yellow on hover */
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="location.href='harmony.html'">Back</button>
+    <!-- Game Container -->
+    <div class="game-container" id="game-container">
+        <div id="timer-bar-container">
+            <div id="timer-bar"></div>
+        </div>
+        <img id="image" src="" alt="Art Movement">
+        <div id="question">What art movement is this?</div>
+        <div id="answer-lines"></div>
+        <div id="jumbled-letters"></div>
+    </div>
+
+    <!-- Game Over Tab -->
+    <div id="game-over-tab">
+        <h1>Game Over!</h1>
+        <p id="score"></p>
+        <button id="play-again-btn" onclick="playAgain()">Play Again</button>
+    </div>
+
+    <script>
+        const artMovements = [
+            { name: "RENAISSANCE", image: "renaissance.jpg" },
+            { name: "BAROQUE", image: "baroque.jpg" },
+            { name: "ROMANTICISM", image: "romanticism.jpg" },
+            { name: "IMPRESSIONISM", image: "impressionism.jpg" },
+            { name: "POSTIMPRESSIONISM", image: "post-impressionism.jpg" },
+            { name: "CUBISM", image: "cubism.jpg" },
+            { name: "SURREALISM", image: "surrealism.jpg" },
+            { name: "ABSTRACTEXPRESSIONISM", image: "abstractexpressionism.jpg" },
+            { name: "POPART", image: "popart.jpg" },
+            { name: "MINIMALISM", image: "minimalism.jpg" }
+        ];
+
+        let currentLevel = 0;
+        let score = 0;
+        let answer = [];
+        let timer;
+        let timeLeft = 15;
+        let filledLetters = 0;
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timeLeft = 15;
+            const timerBar = document.getElementById('timer-bar');
+            timerBar.style.transition = 'none';
+            timerBar.style.width = '100%';
+
+            setTimeout(() => {
+                timerBar.style.transition = 'width 15s linear';
+                timerBar.style.width = '0%';
+            }, 100);
+
+            timer = setTimeout(() => nextLevel(), 15000);
+        }
+
+        function loadLevel() {
+            if (currentLevel >= artMovements.length) return gameOver();
+            
+            const current = artMovements[currentLevel];
+            document.getElementById('image').src = current.image;
+
+            const answerLines = document.getElementById('answer-lines');
+            answerLines.innerHTML = '';
+            answer = Array(current.name.length).fill('');
+            filledLetters = 0;
+
+            current.name.split('').forEach(() => {
+                const line = document.createElement('div');
+                line.className = 'line';
+                answerLines.appendChild(line);
+            });
+
+            const jumbledLetters = document.getElementById('jumbled-letters');
+            jumbledLetters.innerHTML = '';
+            const extraLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').filter(l => !current.name.includes(l));
+            const shuffledLetters = shuffle([...current.name.split(''), ...shuffle(extraLetters).slice(0, 4)]);
+            shuffledLetters.forEach(letter => {
+                const btn = document.createElement('button');
+                btn.className = 'letter';
+                btn.textContent = letter;
+                btn.onclick = () => selectLetter(letter, btn);
+                jumbledLetters.appendChild(btn);
+            });
+
+            startTimer();
+        }
+
+        function selectLetter(letter, button) {
+            for (let i = 0; i < answer.length; i++) {
+                if (answer[i] === '') {
+                    answer[i] = letter;
+                    document.getElementById('answer-lines').children[i].textContent = letter;
+                    button.disabled = true;
+                    filledLetters++;
+                    break;
+                }
+            }
+            if (filledLetters === answer.length) {
+                if (answer.join('') === artMovements[currentLevel].name) {
+                    score++;
+                    nextLevel();
+                } else {
+                    resetAnswer();
+                }
+            }
+        }
+
+        function resetAnswer() {
+            answer = Array(answer.length).fill('');
+            filledLetters = 0;
+            const lines = document.getElementById('answer-lines').children;
+            for (let i = 0; i < lines.length; i++) {
+                lines[i].textContent = '';
+            }
+            const letterButtons = document.querySelectorAll('.letter');
+            letterButtons.forEach(button => button.disabled = false);
+        }
+
+        function nextLevel() {
+            clearInterval(timer);
+            currentLevel++;
+            setTimeout(loadLevel, 500);
+        }
+
+        function gameOver() {
+            document.getElementById('game-container').style.display = 'none';
+            document.getElementById('score').textContent = `Score: ${score}/${artMovements.length}`;
+            document.getElementById('game-over-tab').style.display = 'block';
+        }
+
+        function playAgain() {
+            currentLevel = 0;
+            score = 0;
+            document.getElementById('game-over-tab').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
+            loadLevel();
+        }
+
+        window.onload = loadLevel;
+    </script>
+</body>
+</html>

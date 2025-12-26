@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Quiz Game - Hard Level</title>
+    <style>
+        /* General Styling */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background: url('pebg.jpg') no-repeat center center/cover;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+        }
+
+
+        .game-container {
+            display: flex;
+            max-width: 900px;
+            width: 95%;
+            background: #FFECB3;
+            border: 5px solid #FFAB91;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Left Side (Artist Image) */
+        .left-side {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            background: #FFD3B6;
+            flex-direction: column;
+        }
+
+        #artist-image {
+            max-width: 100%;
+            max-height: 250px;
+            border: 3px solid #FFAB91;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        #artist-name {
+            font-size: 18px;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Right Side (Question, Choices, Timer) */
+        .right-side {
+            flex: 1.5;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        #question {
+            font-size: 20px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* Timer */
+        #timer-bar {
+            width: 100%;
+            height: 12px;
+            background: #FFD3B6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #timer-progress {
+            height: 100%;
+            background: #FF6F61;
+            border-radius: 8px;
+            transition: width 0.1s linear;
+        }
+
+        /* Choices */
+        .choices-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 10px 0;
+        }
+
+        .choice-btn {
+            background: #FFD3B6;
+            border: 2px solid #FFAB91;
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .choice-btn img {
+            max-width: 100%;
+            border-radius: 6px;
+        }
+
+        .choice-btn:hover {
+            background: #FFAB91;
+        }
+
+        /* Game Over */
+        #game-over {
+            display: none;
+            text-align: center;
+        }
+
+        #game-over h1 {
+            color: #FF6F61;
+        }
+
+        #game-over button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #FFAB91;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            margin: 5px;
+        }
+
+       /* Back Button */
+       .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ff87a1; /* Pastel Yellow */
+            color: #000; /* Black text */
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+            background: #ffaffb; /* Lighter pastel yellow on hover */
+        }
+        #hays-image {
+    max-width: 150px;
+    margin-top: 10px;
+    border-radius: 12px;
+}
+
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="location.href='quickstrike.html'">Back</button>
+
+    <div class="game-container">
+        <!-- Left Side: Artist -->
+        <div class="left-side">
+            <img id="artist-image" src="" alt="Artist Image">
+            <div id="artist-name"></div>
+        </div>
+
+        <!-- Right Side: Question, Choices, Timer -->
+        <div class="right-side">
+            <div id="timer-bar">
+                <div id="timer-progress"></div>
+            </div>
+
+            <div id="question">What is his artwork?</div>
+
+            <div class="choices-container" id="choices-container"></div>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    
+    <div id="game-over">
+        <img src="hays.jpg" alt="Game Over" id="hays-image">
+        <h1>Game Over!</h1>
+        <p id="final-score"></p>
+        <button onclick="window.location.reload()">Play Again</button>
+    </div>
+
+    <script>
+        const artworks = [
+           
+            { artistImage: "ronaldo.jpg", artist: "Cristiano Ronaldo dos Santos Aveiro", artworks: ["soccerball.jpg", "football.jpg", "golfball.jpg", "baseballball.jpg"], correct: "soccerball.jpg" },
+            { artistImage: "jordan.jpg", artist: "Michael Jeffrey Jordan", artworks: ["basketballball.jpg", "baseballball.jpg", "football.jpg", "sepakball.jpg"], correct: "basketball.jpg" },
+            { artistImage: "speed.jpg", artist: "Darren Watkins", artworks: ["soccerball.jpg", "football.jpg", "sepakball.jpg", "golfball.jpg"], correct: "soccerball.jpg" },
+            { artistImage: "roger.jpg", artist: "Roger Federer", artworks: ["volleyballball.jpg", "tennisball.jpg", "basketballball.jpg", "baseballball.jpg"], correct: "tennisball.jpg" },
+            { artistImage: "serena.jpg", artist: "Serena Williams", artworks: ["tennisball.jpg", "football.jpg", "basketballball.jpg", "volleyballball.jpg"], correct: "tennisball.jpg" },
+            { artistImage: "messi.jpg",  artist: "Cristiano Ronaldo dos Santos Aveiro", artworks: ["soccerball.jpg", "football.jpg", "golfball.jpg", "volleyballball.jpg"], correct: "soccerball.jpg" },
+
+        ];
+
+        let score = 0;
+        let currentArtwork;
+        let timer;
+
+        function startGame() {
+            nextArtwork();
+        }
+
+        function nextArtwork() {
+            if (artworks.length === 0) {
+                document.querySelector(".game-container").style.display = "none";
+                document.getElementById("game-over").style.display = "block";
+                document.getElementById("final-score").textContent = `Score: ${score}`;
+                return;
+            }
+
+            currentArtwork = artworks.pop();
+            document.getElementById("artist-image").src = currentArtwork.artistImage;
+            document.getElementById("artist-name").textContent = `Artist: ${currentArtwork.artist}`;
+
+            loadChoices();
+            startTimer();
+        }
+
+        function loadChoices() {
+            const choicesContainer = document.getElementById("choices-container");
+            choicesContainer.innerHTML = "";
+
+            const options = currentArtwork.artworks.sort(() => Math.random() - 0.5);
+
+            options.forEach(option => {
+                const btn = document.createElement("button");
+                btn.classList.add("choice-btn");
+                btn.onclick = () => checkAnswer(btn, option);
+
+                const img = document.createElement("img");
+                img.src = option;
+                btn.appendChild(img);
+                choicesContainer.appendChild(btn);
+            });
+        }
+
+        function startTimer() {
+            const timerProgress = document.getElementById("timer-progress");
+            timerProgress.style.transition = "none";
+            timerProgress.style.width = "100%";
+
+            setTimeout(() => {
+                timerProgress.style.transition = "width 5s linear";
+                timerProgress.style.width = "0%";
+            }, 100);
+
+            timer = setTimeout(() => {
+                nextArtwork();
+            }, 5000);
+        }
+
+        function checkAnswer(button, selected) {
+            clearTimeout(timer);
+
+            if (selected === currentArtwork.correct) {
+                score++;
+                button.style.background = "#A5D6A7";
+            } else {
+                button.style.background = "#EF5350";
+            }
+
+            setTimeout(nextArtwork, 1000);
+        }
+
+        startGame();
+    </script>
+</body>
+</html>

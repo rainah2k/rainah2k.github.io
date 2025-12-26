@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Quiz Game</title>
+    <style>
+        /* General Styling */
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #FFECB3;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .game-container {
+            display: flex;
+            max-width: 1000px;
+            width: 90%;
+            background: #FFECB3;
+            border: 5px solid #FFAB91;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Left Side (Image) */
+        .left-side {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #FFD3B6;
+        }
+
+        #artist-image {
+            max-width: 100%;
+            max-height: 350px;
+            border: 3px solid #FFAB91;
+            border-radius: 8px;
+        }
+
+        /* Right Side (Question and Choices) */
+        .right-side {
+            flex: 1.5;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        #question {
+            font-size: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Timer */
+        #timer-bar {
+            width: 100%;
+            height: 15px;
+            background: #FFD3B6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #timer-progress {
+            height: 100%;
+            background: #FF6F61;
+            border-radius: 8px;
+            transition: width 0.2s linear;
+        }
+
+        /* Choices */
+        .choices-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .choice-btn {
+            background: #FFD3B6;
+            border: 2px solid #FFAB91;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 18px;
+            color: #333;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .choice-btn:hover {
+            background: #FFAB91;
+            color: white;
+        }
+
+        /* Shake Effect */
+        .shake {
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+        }
+
+        /* Game Over */
+        #game-over {
+            display: none;
+            text-align: center;
+        }
+
+        #game-over h1 {
+            color: #FF6F61;
+        }
+
+        #game-over button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #FFAB91;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            margin: 5px;
+        }
+        /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #FFF9C4; /* Pastel Yellow */
+            color: #000; /* Black text */
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+            background: #FFECB3; /* Lighter pastel yellow on hover */
+        }
+    </style>
+</head>
+<body>
+    
+   <button class="back-button" onclick="location.href='puzzle.html'">Back</button>
+   
+    <div class="game-container">
+        <!-- Left Side: Image -->
+        <div class="left-side">
+            <img id="artist-image" src="" alt="Artist">
+        </div>
+
+        <!-- Right Side: Question, Choices, Timer -->
+        <div class="right-side">
+            <!-- Timer -->
+            <div id="timer-bar">
+                <div id="timer-progress"></div>
+            </div>
+
+            <!-- Question -->
+            <div id="question">Which artwork is created by this artist?</div>
+
+            <!-- Choices -->
+            <div class="choices-container" id="choices-container"></div>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over">
+        <h1>Game Over!</h1>
+        <p id="final-score"></p>
+        <button onclick="window.location.reload()">Play Again</button><!--  -->
+    </div>
+
+    <script>
+        const artists = [
+    { image: "leonardodavinci.jpg", correct: "Mona Lisa", wrong: ["The Starry Night", "The Kiss", "The Girl with a Pearl Earring"] },
+    { image: "vincentvangogh.jpg", correct: "The Starry Night", wrong: ["Mona Lisa", "The Persistence of Memory", "The Birth of Venus"] },
+    { image: "gustavklimt.jpg", correct: "The Kiss", wrong: ["The Garden of Earthly Delights", "Water Lilies", "The Scream"] },
+    { image: "johannesvermeer.jpg", correct: "The Girl with a Pearl Earring", wrong: ["The Persistence of Memory", "Mona Lisa", "Guernica"] },
+    { image: "leonardodavinci.jpg", correct: "The Last Supper", wrong: ["The Kiss", "Water Lilies", "The Starry Night"] },
+    { image: "sandrobotticelli.jpg", correct: "The Birth of Venus", wrong: ["The Scream", "The Garden of Earthly Delights", "Water Lilies"] },
+    { image: "hieronymusbosch.jpg", correct: "The Garden of Earthly Delights", wrong: ["The Last Supper", "The Kiss", "The Starry Night"] },
+    { image: "caspardavidfriedrich.jpg", correct: "Wanderer above the Sea of Fog", wrong: ["The Persistence of Memory", "Guernica", "The Scream"] },
+    { image: "claudemonet.jpg", correct: "Water Lilies", wrong: ["The Kiss", "The Night Watch", "The Birth of Venus"] }
+];
+
+
+        let remainingArtists = [...artists];
+        let currentArtist = null;
+        let score = 0;
+        let timer;
+        function startGame() {
+            remainingArtists = artists.sort(() => Math.random() - 0.5);
+            nextArtist();
+        }
+
+        function nextArtist() {
+            clearTimeout(timer);
+
+            if (remainingArtists.length === 0) {
+                document.querySelector(".game-container").style.display = "none";
+    document.getElementById("game-over").style.display = "block";
+                document.getElementById("final-score").textContent = `Score: ${score}`;
+                return;
+            }
+
+            currentArtist = remainingArtists.pop();
+            document.getElementById("artist-image").src = currentArtist.image;
+            loadChoices();
+            startTimer();
+        }
+
+        function loadChoices() {
+            const choicesContainer = document.getElementById("choices-container");
+            choicesContainer.innerHTML = "";
+
+            const options = [currentArtist.correct, ...currentArtist.wrong].sort(() => Math.random() - 0.5);
+
+            options.forEach(option => {
+                const btn = document.createElement("button");
+                btn.classList.add("choice-btn");
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer(btn, option);
+                choicesContainer.appendChild(btn);
+            });
+        }
+
+        function startTimer() {
+            const timerProgress = document.getElementById("timer-progress");
+            timerProgress.style.transition = "none";
+            timerProgress.style.width = "100%";
+
+            setTimeout(() => {
+                timerProgress.style.transition = "width 20s linear";
+                timerProgress.style.width = "0%";
+            }, 100);
+
+            timer = setTimeout(() => {
+                nextArtist();
+            }, 20000);
+        }
+
+        function checkAnswer(button, selected) {
+            clearTimeout(timer);
+
+            if (selected === currentArtist.correct) {
+                score++;
+                button.style.background = "#A5D6A7"; // Green for correct
+                setTimeout(nextArtist, 1000);
+            } else {
+                button.style.background = "#EF5350"; // Red for wrong
+                button.classList.add("shake");
+                setTimeout(() => {
+                    button.classList.remove("shake");
+                    nextArtist();
+                }, 1000);
+            }
+        }
+
+        startGame();
+    </script>
+</body>
+</html>
