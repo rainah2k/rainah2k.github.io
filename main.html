@@ -10,37 +10,95 @@
 </head>
 
 <body>
+
+  <audio id="bgMusic" loop>
+  <source src="backgroundmusicnirainah.mp3" type="audio/mpeg">
+  </audio>
+
+
 <nav class="main-header">
-  <a href="rainah.html" class="back-btn">Back</a>
-  <ul class="nav-links">
-    <li><a href="#about"><b>About</b></a></li>
-    <li><a href="#hobbies"><b>Hobbies</b></a></li>
-    <li><a href="#projects"><b>Projects</b></a></li>
-    <li><a href="#gallery"><b>Gallery</b></a></li>
-    <li><a href="#contact"><b>Contact</b></a></li>
-  </ul>
+  <a href="rainah.html" class="back-btn">
+    <img src="bckbtn.jpg" alt="Back">
+    <span>Back</span>
+  </a>
+  
+    <div class="settings-container">
+    <a class="settings-btn-wrapper">
+      <img src="settings.jpg" alt="Settings ni Rainah" class="settings-btn">
+      <span class="settings-text">Sections</span>
+    </a>
+
+    <div class="settings-dropdown">
+      <a href="#about">
+        <img src="about.jpg" alt="About ni Rainah">
+        <span>About</span>
+      </a>
+
+      <a href="#hobbies">
+        <img src="hobbies.jpg" alt="Hobbies ni Rainah">
+        <span>Hobbies</span>
+      </a>
+
+      <a href="#projects">
+        <img src="projects.jpg" alt="Projects ni Rainah">
+        <span>Projects</span>
+      </a>
+
+      <a href="#piksurq">
+        <img src="gallery.jpg" alt="Gallery ni Rainah">
+        <span>Gallery</span>
+      </a>
+
+      <a href="#contact">
+        <img src="contact.jpg" alt="Contact ni Rainah">
+        <span>Contact</span>
+      </a>
+
+      <a href="#contact">
+        <img src="skills.jpg" alt="Skills ni Rainah">
+        <span>Skills</span>
+      </a>
+    </div>
+  </div>
 </nav>
+
+  <script>
+  const settingsBtnWrapper = document.querySelector('.settings-btn-wrapper');
+  const settingsCont = document.querySelector('.settings-container');
+  settingsBtnWrapper.addEventListener('click', () => {
+  settingsCont.classList.toggle('active');
+});
+
+  </script>
+
 
 <div class="bubble"></div>
 <div class="bubble"></div>
 <div class="bubble"></div>
 <div class="bubble"></div>
 <div class="bubble"></div>
+
+<div class="cd-player">
+  <img src="cdnirai.png" alt="LOFI TO BASTA CD" id="cdDisc">
+</div>
 
 
 <header class="rairai">
   <div class="rairai-content">
         <div class="rairai-image">
-      <img src="akoto.jpg" alt="Rai Dionida">
+      <img src="akoto.jpg" alt="Rainah RAHHH">
     </div>
     <h1>
-      Hi, I’m <span class="highlight">Rai</span><br>
-      I design and build things for the web
+      Hi, I’m <span class="highlight">Rai</span>!<br>
+      Your future artist and animator.
     </h1>
     <p>
-      I’m a student and aspiring web designer focused on clean UI, creative layouts,
-      and turning ideas into interactive experiences. This portfolio shows who I am,
-      how I design, and the work I’m growing through.
+        I’m a student and photojournalist with a passion for creating, 
+        whether it’s capturing moments with my camera or experimenting with games. 
+        I’m drawn to art, animation, and digital creativity, 
+        and I hope to turn that into a career where I can make experiences people enjoy. 
+        This portfolio shares the work I’ve done so far, what I’m learning, and the ideas 
+        I’m exploring as I grow creatively.
     </p>
 
   </div>
@@ -98,70 +156,106 @@
   </div>
 </section>
 
-
 <section id="projects" class="reveal">
-  <h2 class="section-title">Projects</h2>
+  <h2 class="section-title">My Projects</h2>
 
-  <div class="projects-scroll reveal">
+  <div class="tanawin">
 
-    <div class="project-card reveal">
-      <div class="project-image">
-        <img src="posa-one.png" alt="Photo Album">
-      </div>
-      <div class="project-info">
-        <h3>Photo Album</h3>
-        <p>UTS Project.</p>
-        <a href="firstproject.html">View Project →</a>
-      </div>
+    <div class="binalotnirai-kard" data-x="0">
+      <a href="firstproject.html" class="link-kard">
+        <div class="kard" style="--img:url('album.png')">
+          <div class="meta">PROJECT #001 · Album</div>
+        </div>
+      </a>
     </div>
 
-    <div class="project-card reveal">
-      <div class="project-image">
-        <img src="pj2cover.jpg" alt="Types of Animations in CSS">
-      </div>
-      <div class="project-info">
-        <h3>Types of Animations in CSS</h3>
-        <p>Grade 12.</p>
-        <a href="secondproject.html">View Project →</a>
-      </div>
+    <div class="binalotnirai-kard" data-x="220">
+      <a href="secondproject.html" class="link-kard">
+        <div class="kard" style="--img:url('animations.png')">
+          <div class="meta">PROJECT #002 · Animations in CSS</div>
+        </div>
+      </a>
     </div>
 
-    <div class="project-card reveal">
-      <div class="project-image">
-        <img src="calcu.png" alt="Calculator">
-      </div>
-      <div class="project-info reveal">
-        <h3>Calculator</h3>
-        <p>A simple calculator from my SHS</p>
-        <a href="thirdproject.html">View Project →</a>
-      </div>
+    <div class="binalotnirai-kard" data-x="440">
+      <a href="thirdproject.html" class="link-kard">
+        <div class="kard" style="--img:url('calculator.png')">
+          <div class="meta">PROJECT #003 · Calculator</div>
+        </div>
+      </a>
     </div>
 
-    <div class="project-card reveal">
-      <div class="project-image">
-        <img src="game.png" alt="Harmonia Guardian">
-      </div>
-      <div class="project-info">
-        <h3>Harmonia Guardian</h3>
-        <p>An HTML game based in MAPEH subject.</p>
-        <a href="mainmenu.html">View Project →</a>
-      </div>
+    <div class="binalotnirai-kard" data-x="660">
+      <a href="mainmenu.html" class="link-kard">
+        <div class="kard" style="--img:url('controller.png')">
+          <div class="meta">PROJECT #004 · Game</div>
+        </div>
+      </a>
     </div>
 
-    <div class="project-card reveal">
-      <div class="project-image">
-        <img src="pj3.png" alt="Tindahan ni Rainah">
-      </div>
-      <div class="project-info">
-        <h3>Tindahan ni Rainah</h3>
-        <p>Kiosk System.</p>
-        <a href="knr-intro.html">View Project →</a>
-      </div>
+    <div class="binalotnirai-kard" data-x="880">
+      <a href="knr-intro.html" class="link-kard">
+        <div class="kard" style="--img:url('kiosk.png')">
+          <div class="meta">PROJECT #005 · Kiosk</div>
+        </div>
+      </a>
     </div>
 
   </div>
 </section>
 
+
+<script>
+document.querySelectorAll('.kard').forEach(kard=>{
+  kard.addEventListener('mousemove', e=>{
+    const r = kard.getBoundingClientRect();
+    kard.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    kard.style.setProperty('--my', `${e.clientY - r.top}px`);
+  });
+});
+
+const mgabinalotnirai = document.querySelectorAll('.binalotnirai-kard');
+let alonMgaKard = [];
+
+mgabinalotnirai.forEach((binalotnirai,i)=>{
+  const x = Number(binalotnirai.dataset.x);
+  const y = 20;
+  const kard = binalotnirai.querySelector('.kard');
+
+  const sx = Math.random()*1000 - 500;
+  const sy = Math.random()*700 - 350;
+  const r = Math.random()*240 - 120;
+
+  binalotnirai.style.transform = `translate3d(${sx}px,${sy}px,0)`;
+  kard.style.transform = `scale(.3) rotate(${r}deg)`;
+
+  setTimeout(()=>{
+    binalotnirai.style.transform = `translate3d(${x}px,${y}px,0)`;
+    kard.style.transform = `scale(1) rotate(0deg)`;
+    kard.style.opacity = 1;
+    kard.classList.add('nakaayos');
+
+    alonMgaKard.push({
+      el: binalotnirai,
+      x, y,
+      phase: i*0.9
+    });
+  }, i*160 + 300);
+});
+
+let oras = 0;
+function alon(){
+  oras += 0.025;
+  alonMgaKard.forEach(k=>{
+    const offsetY = Math.sin(oras + k.phase) * 6;
+    const offsetZ = Math.cos(oras + k.phase) * 12;
+    k.el.style.transform = `translate3d(${k.x}px, ${k.y + offsetY}px, ${offsetZ}px)`;
+  });
+  requestAnimationFrame(alon);
+}
+
+setTimeout(()=>{ alon(); }, 1200);
+</script>
 
 <section id="emes" class="reveal">
   <h2 class="section-title">Skills</h2>
@@ -215,6 +309,7 @@
   </div>
 </section>
 
+
 <section id="education" class="reveal">
   <h2 class="section-title">Education</h2>
 
@@ -241,23 +336,27 @@
   <h2 class="piksurq-title">THIS IS RAINAH</h2>
 
   <div class="piksurq-rotator  reveal">
+
 <div class="piksurq-ring">
-
-  <div class="piksurq-card reveal"><img src="woof.jpg"></div>
-  <div class="piksurq-card reveal"><img src="mask.jpg"></div>
-    <div class="piksurq-card reveal"><img src="mercury.jpg"></div>
-  <div class="piksurq-card reveal"><img src="close-up.jpg"></div>
-  <div class="piksurq-card reveal"><img src="mee.jpg"></div>
-  <div class="piksurq-card reveal"><img src="ehe.jpg"></div>
-  <div class="piksurq-card reveal"><img src="18.jpg"></div>
-  <div class="piksurq-card reveal"><img src="whitee.jpg"></div>
-  <div class="piksurq-card reveal"><img src="haha.jpg"></div>
-  <div class="piksurq-card reveal"><img src="award.jpg"></div>
-
+  <div class="piksurq-card reveal"><img src="piksurq2.png"></div>
+  <div class="piksurq-card reveal"><img src="piksurq3.png"></div>
+  <div class="piksurq-card reveal"><img src="piksurq4.png"></div>
+  <div class="piksurq-card reveal"><img src="piksurq5.png"></div>
+  <div class="piksurq-card reveal"><img src="piksurq6.png"></div>
+  <div class="piksurq-card reveal"><img src="piksurq7.png"></div>
+  <div class="piksurq-card reveal"><img src="piksurq8.png"></div>
+  <div class="piksurq-card reveal"><img src="piksurq9.png"></div>
+  <div class="piksurq-card reveal"><img src="piksurq10.png"></div>
 </div>
 
   </div>
 </section>
+
+<div id="nftModal" class="nft-modal">
+  <span class="close-btn">&times;</span>
+  <img class="modal-content" id="modalImg">
+</div>
+
 
 <section id="achievements" class="reveal">
   <h2 class="section-title">Achievements & Activities</h2>
@@ -339,12 +438,6 @@
       <img src="app1.png" alt="posang nakatayo" class="icon">
       <p>I plan my projects but leave room to experiment.</p>
     </div>
-
-    <div class="extra-card">
-      <img src="app1.png" alt="posang nakatayo" class="icon">    
-      <p>I make sure my work looks good on any screen.</p>
-    </div>
-  </div>
 </section>
 
 <section id="contact" class="reveal">
@@ -369,6 +462,31 @@
 <footer>
   © 2025 Rainah Palaganas · My Portfolio
 </footer>
+
+<script>
+// Get modal elements
+const modal = document.getElementById("nftModal");
+const modalImg = document.getElementById("modalImg");
+const closeBtn = document.querySelector(".close-btn");
+
+// Open modal when a card image is clicked
+document.querySelectorAll(".piksurq-card img").forEach(img => {
+  img.addEventListener("click", () => {
+    modal.style.display = "flex";
+    modalImg.src = img.src;
+  });
+});
+
+// Close modal on X button click
+closeBtn.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+// Optional: close modal when clicking outside the image
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) modal.style.display = "none";
+});
+</script>
 
 <script>
 
@@ -541,4 +659,40 @@ function move(dir) {
 render();
 </script>
 
+<script>
+const settingsBtn = document.querySelector('.settings-btn');
+const settingsContainer = document.querySelector('.settings-container');
+
+settingsBtn.addEventListener('click', () => {
+  settingsContainer.classList.toggle('active');
+});
+
+// Click outside to close
+document.addEventListener('click', (e) => {
+  if (!settingsContainer.contains(e.target)) {
+    settingsContainer.classList.remove('active');
+  }
+});
+</script>
+
+<script>
+const music = document.getElementById('bgMusic');
+const cd = document.getElementById('cdDisc');
+
+let isPlaying = false;
+
+cd.addEventListener('click', () => {
+  if (!isPlaying) {
+    music.play();
+    cd.classList.add('playing');
+    isPlaying = true;
+  } else {
+    music.pause();
+    cd.classList.remove('playing');
+    isPlaying = false;
+  }
+});
+</script>
+
+</body>
 </html>
