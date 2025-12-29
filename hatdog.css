@@ -106,13 +106,13 @@ body {
 }
 
 .rairai-image img {
-  width: 250px;
-  height: 250px;
+  width: 270px;
+  height: 270px;
   object-fit: cover;
   border-radius: 50%;
-  border: 4px solid rgba(106, 63, 191, 0.3);
-  margin-top: 15px;
-  box-shadow: 0 8px 25px rgba(99, 66, 155, 0.2);
+  border: 8px solid rgba(106, 63, 191, 0.3);
+  margin-top: 50px;
+  box-shadow: 0 10px 35px rgba(152, 107, 228, 0.692);
   transition: transform 0.3s ease;
 }
 
@@ -697,13 +697,18 @@ footer {
 }
 
 .eme-card {
-  height: 260px;
-  background: #9b82ca;
-  padding: 30px;
+  height: 250px;
+  padding: 25px;
   border-radius: 25px;
   box-shadow: 0 15px 35px rgba(189, 163, 234, 0.18);
   animation: emeFloat 4s ease-in-out infinite;
+  background-image: url("bgforskills.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
 }
+
 
 .extra-card .icon {
   width: 120px;
@@ -741,14 +746,14 @@ footer {
 }
 
 .eme-front {
-  background: linear-gradient(135deg, #ab5dff, #583796);
-  color: #cdaaff;
+  background: linear-gradient(135deg, #ab5dffef, #583796e3);
+  color: #deccf8;
   font-size: 1.3rem;
   font-weight: 700;
 }
 
 .eme-back {
-  background: #a67cff;
+  background: #a57cffa4;
   color: #fff;
   transform: rotateY(180deg);
   font-size: .95rem;
@@ -1128,3 +1133,139 @@ footer {
   color: #bbb;
 }
 
+.gansalpa-nft-section {
+  text-align: center;
+  overflow: visible;
+  padding: 120px 10%;
+}
+
+.gansalpa-gift-img {
+  display: inline-block;
+  position: relative;
+  width: 260px;
+
+  filter:
+    drop-shadow(0 0 30px rgba(218,126,213,0.7))
+    drop-shadow(0 0 50px rgba(184,117,255,0.5))
+    drop-shadow(0 0 70px rgba(92,255,215,0.4));
+
+  animation:
+    gansalpaEdgeBreath 10s ease-in-out infinite,
+    gansalpaSwayFlipPause 10s ease-in-out infinite;
+
+  cursor: pointer;
+  z-index: 2;
+  transform-style: preserve-3d;
+}
+
+.gansalpa-gift-img::after {
+  content: "";
+  position: absolute;
+  inset: -25px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(218,126,213,0.5), transparent 70%);
+  filter: blur(25px);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes gansalpaEdgeBreath {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 35px rgba(105, 34, 102, 0.76))
+      drop-shadow(0 0 50px rgba(75, 41, 112, 0.637))
+      drop-shadow(0 0 70px rgba(27, 88, 73, 0.541));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 35px rgba(218,126,213,0.8))
+      drop-shadow(0 0 60px rgba(184,117,255,0.65))
+      drop-shadow(0 0 90px rgba(92,255,215,0.5));
+  }
+}
+
+@keyframes gansalpaSwayFlipPause {
+  0%   { transform: translateX(0) rotateY(0deg); }       
+  15%  { transform: translateX(-40px) rotateY(20deg); }  
+  25%  { transform: translateX(0) rotateY(0deg); }       
+  40%  { transform: translateX(40px) rotateY(-20deg); }  
+  50%  { transform: translateX(0) rotateY(0deg); }       
+  70%  { transform: translateX(-40px) rotateY(20deg); }  
+  75%  { transform: translateX(0) rotateY(0deg); }       
+  90%  { transform: translateX(40px) rotateY(-20deg); }  
+  100% { transform: translateX(0) rotateY(0deg); }       
+}
+
+
+/* ================================
+   VIDEO MODAL
+================================ */
+.gansalpa-video-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+
+  z-index: 9999;
+}
+
+.gansalpa-video-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gansalpa-video-box {
+  position: relative;
+  width: 90%;
+  max-width: 900px;
+
+  border-radius: 20px;
+  overflow: hidden;
+  background: #000;
+
+  box-shadow: 0 0 60px rgba(184,117,255,0.6);
+}
+
+.gansalpa-video {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: block;
+}
+
+/* ================================
+   CLOSE BUTTON
+================================ */
+.gansalpa-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+
+  z-index: 10;
+  pointer-events: auto;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  border: none;
+  cursor: pointer;
+
+  font-size: 20px;
+  color: #fff;
+
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+}
+
+.gansalpa-close-btn:hover {
+  background: rgba(255,255,255,0.35);
+}

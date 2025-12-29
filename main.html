@@ -87,19 +87,18 @@
 <header class="rairai">
   <div class="rairai-content">
         <div class="rairai-image">
-      <img src="akoto.jpg" alt="Rainah RAHHH">
+      <img src="ulitt.png" alt="Rainah RAHHH">
     </div>
     <h1>
-      Hi, I’m <span class="highlight">Rai</span>!<br>
+      Hi, I’m <span class="highlight">Rainah</span>!<br>
       Your future artist and animator.
     </h1>
     <p>
         I’m a student and photojournalist with a passion for creating, 
-        whether it’s capturing moments with my camera or experimenting with games. 
+        whether capturing moments with my camera or exploring games. 
         I’m drawn to art, animation, and digital creativity, 
-        and I hope to turn that into a career where I can make experiences people enjoy. 
-        This portfolio shares the work I’ve done so far, what I’m learning, and the ideas 
-        I’m exploring as I grow creatively.
+        and this portfolio shares the work I’ve done, what I’m learning, 
+        and the ideas I’m exploring as I grow creatively.
     </p>
 
   </div>
@@ -269,7 +268,7 @@ setTimeout(()=>{ alon(); }, 1200);
           <h3>Technical</h3>
         </div>
         <div class="eme-back">
-          <p>Photo & graphic editing.</p>
+          <p>Photo and graphic editing for school projects and personal experiments.</p>
         </div>
       </div>
     </div>
@@ -280,7 +279,7 @@ setTimeout(()=>{ alon(); }, 1200);
           <h3>HTML & CSS</h3>
         </div>
         <div class="eme-back">
-          <p>Responsive layouts with clean structure & animations.</p>
+          <p>Building simple websites with layouts, colors, and animations while learning best practices.</p>
         </div>
       </div>
     </div>
@@ -291,7 +290,7 @@ setTimeout(()=>{ alon(); }, 1200);
           <h3>JavaScript</h3>
         </div>
         <div class="eme-back">
-          <p>Interactive UI effects & scroll-based behaviors.</p>
+          <p>Adding interactive elements and experimenting with scroll effects and small scripts.</p>
         </div>
       </div>
     </div>
@@ -299,16 +298,17 @@ setTimeout(()=>{ alon(); }, 1200);
     <div class="eme-card reveal">
       <div class="eme-inner">
         <div class="eme-front">
-          <h3>Creative Skills</h3>
+          <h3>Creative Skills</h3>  
         </div>
         <div class="eme-back">
-          <p>Skilled in journaling, and designing visual layouts and galleries.</p>
+          <p>Journaling ideas, designing simple galleries, and trying out visual layouts for fun and practice.</p>
         </div>
       </div>
     </div>
 
   </div>
 </section>
+
 
 
 <section id="education" class="reveal">
@@ -339,6 +339,8 @@ setTimeout(()=>{ alon(); }, 1200);
   <div class="piksurq-rotator  reveal">
 
 <div class="piksurq-ring">
+
+  <div class="piksurq-card reveal"><img src="piksurq1.png"></div>
   <div class="piksurq-card reveal"><img src="piksurq2.png"></div>
   <div class="piksurq-card reveal"><img src="piksurq3.png"></div>
   <div class="piksurq-card reveal"><img src="piksurq4.png"></div>
@@ -352,6 +354,45 @@ setTimeout(()=>{ alon(); }, 1200);
 
   </div>
 </section>
+
+<section class="gansalpa-nft-section reveal">
+  <h2 class="piksurq-title">RAINAH'S HUSBAND</h2>
+  <p>U may not know but I'm already married.</p>
+
+  <div class="gansalpa-gift-wrap">
+    <img src="tsuki.png" alt="NFT Gift" class="gansalpa-gift-img">
+  </div>
+</section>
+
+<div class="gansalpa-video-modal">
+  <div class="gansalpa-video-box">
+    <button class="gansalpa-close-btn">✕</button>
+    <video class="gansalpa-video" src="tsuki.mp4"></video>
+  </div>
+</div>
+
+
+<script>
+const gansalpaGift = document.querySelector('.gansalpa-gift-wrap');
+const gansalpaModal = document.querySelector('.gansalpa-video-modal');
+const gansalpaVideo = document.querySelector('.gansalpa-video');
+const gansalpaClose = document.querySelector('.gansalpa-close-btn');
+
+gansalpaGift.addEventListener('click', () => {
+  gansalpaModal.classList.add('active');
+  gansalpaVideo.currentTime = 0;
+  gansalpaVideo.play();
+});
+
+function gansalpaCloseVideo() {
+  gansalpaVideo.pause();
+  gansalpaVideo.currentTime = 0;
+  gansalpaModal.classList.remove('active');
+}
+gansalpaClose.addEventListener('click', gansalpaCloseVideo);
+gansalpaVideo.addEventListener('ended', gansalpaCloseVideo);
+</script>
+
 
 <div id="nftModal" class="nft-modal">
   <span class="close-btn">&times;</span>
@@ -465,12 +506,11 @@ setTimeout(()=>{ alon(); }, 1200);
 </footer>
 
 <script>
-// Get modal elements
+
 const modal = document.getElementById("nftModal");
 const modalImg = document.getElementById("modalImg");
 const closeBtn = document.querySelector(".close-btn");
 
-// Open modal when a card image is clicked
 document.querySelectorAll(".piksurq-card img").forEach(img => {
   img.addEventListener("click", () => {
     modal.style.display = "flex";
@@ -478,12 +518,10 @@ document.querySelectorAll(".piksurq-card img").forEach(img => {
   });
 });
 
-// Close modal on X button click
 closeBtn.addEventListener("click", () => {
   modal.style.display = "none";
 });
 
-// Optional: close modal when clicking outside the image
 modal.addEventListener("click", (e) => {
   if (e.target === modal) modal.style.display = "none";
 });
@@ -668,7 +706,6 @@ settingsBtn.addEventListener('click', () => {
   settingsContainer.classList.toggle('active');
 });
 
-// Click outside to close
 document.addEventListener('click', (e) => {
   if (!settingsContainer.contains(e.target)) {
     settingsContainer.classList.remove('active');
