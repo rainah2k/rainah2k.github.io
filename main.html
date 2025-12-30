@@ -105,9 +105,9 @@
 </header>
 
 
-<section id="about" class="section reveal">
+<section id="about" class="reveal">
 
-<h2 class="ewankorin-title reveal">About Me</h2>
+<h2 class="ewankorin-title">About Me</h2>
 
   <section id="ewankokayrainah">
 
@@ -137,7 +137,7 @@
 
 
 <section id="hobbies" class="reveal">    
-<h2 class="ewankorin-title reveal">Hobbies</h2>
+<h2 class="ewankorin-title">Hobbies</h2>
 
   <div class="reveal hobbies">
     <div class="hobby-card">
@@ -160,7 +160,7 @@
 </section>
 
 <section id="projects" class="reveal">
-  <h2 class="ewankorin-title reveal">My Projects</h2>
+  <h2 class="ewankorin-title">My Projects</h2>
 
   <div class="reveal tanawin">
 
@@ -261,7 +261,7 @@ setTimeout(()=>{ alon(); }, 1200);
 </script>
 
 <section id="emes" class="reveal">
-<h2 class="ewankorin-title reveal">Skills</h2>
+<h2 class="ewankorin-title">Skills</h2>
 
   <div class="emes-grid reveal">
     
@@ -315,7 +315,7 @@ setTimeout(()=>{ alon(); }, 1200);
 
 
 <section id="education" class="reveal">  
-<h2 class="ewankorin-title reveal">Education</h2>
+<h2 class="ewankorin-title">Education</h2>
 
   <div class="education-container">
     <div class="info-card reveal">
@@ -335,9 +335,8 @@ setTimeout(()=>{ alon(); }, 1200);
 </div>
 </section>
 
-
-<section class="piksurq reveal" id="piksurq">
-<h2 class="ewankorin-title reveal">This is Rainah</h2>
+<section id="piksurq" class="reveal">
+<h2 class="ewankorin-title">This is Rainah</h2>
 
   <div class="piksurq-rotator  reveal">
 
@@ -358,11 +357,12 @@ setTimeout(()=>{ alon(); }, 1200);
   </div>
 </section>
 
+
 <section class="gansalpa-ewankorin-section reveal">
-<h2 class="ewankorin-title reveal">Rainah's Husband</h2>
+<h2 class="ewankorin-title">Rainah's Husband</h2>
   <p>U may not know but I'm already married. (Please click him, hehe.)</p>
 
-  <div class="gansalpa-gift-wrap reveal">
+  <div class="gansalpa-gift-wrap">
     <img src="tsukiulit.png" alt="ewankorin Gift" class="gansalpa-gift-img">
   </div>
 </section>
@@ -404,7 +404,7 @@ gansalpaVideo.addEventListener('ended', gansalpaCloseVideo);
 
 
 <section id="achievements" class="reveal">
-    <h2 class="ewankorin-title reveal">Achievements & Activities</h2>
+    <h2 class="ewankorin-title">Achievements & Activities</h2>
 
   <div class="achievements-timeline">
 
@@ -461,7 +461,7 @@ gansalpaVideo.addEventListener('ended', gansalpaCloseVideo);
 
 
 <section id="extras" class="reveal extras-section">
-    <h2 class="ewankorin-title reveal">Approach</h2>
+    <h2 class="ewankorin-title">Approach</h2>
   <div class="extras-grid">
     <div class="extra-card">
         <img src="app1.png" alt="posang nakatayo" class="icon">
@@ -485,23 +485,29 @@ gansalpaVideo.addEventListener('ended', gansalpaCloseVideo);
 </section>
 
 <section id="contact" class=" contact-ewankorin">
-  <h2 class="ewankorin-title reveal">Send Me Love</h2>
+  <h2 class="ewankorin-title">Send Me Love</h2>
 
-  <div class="reveal ewankorin-contact-wrap">
+    <div class="reveal ewankorin-contact-wrap">
 
     <div class="reveal ewankorin-card">
       <div class="ewankorin-field">
-        <input type="text" placeholder="Your Name ♡">
+        <input type="text" id="ew-name" placeholder="Your Name ♡">
+        <span class="error-msg"></span>
       </div>
+
       <div class="ewankorin-field">
-        <input type="email" placeholder="Your Email ♡">
+        <input type="email" id="ew-email" placeholder="Your Email ♡">
+        <span class="error-msg"></span>
       </div>
+
       <div class="ewankorin-field">
-        <textarea rows="4" placeholder="Your Message ♡"></textarea>
+        <textarea id="ew-message" rows="4" placeholder="Your Message ♡"></textarea>
+        <span class="error-msg"></span>
       </div>
+
       <button class="ewankorin-send">Send Message ♡</button>
     </div>
-
+  
     <div class="reveal ewankorin-socials-grid">
       <a href="https://www.facebook.com/yourloverai" class="ewankorin-box">
         <img src="fb.png" alt="Facebook">
@@ -531,6 +537,74 @@ gansalpaVideo.addEventListener('ended', gansalpaCloseVideo);
 
   </div>
 </section>
+
+<div id="ewankorin-nope" class="ewankorin-nope">
+  <div class="ewankorin-nope-box">
+    <h3>Message Sent</h3>
+    <p>Thank you for your message! I’ll get back to you soon ♡</p>
+    <button id="closenope">Okay ♡</button>
+  </div>
+</div>
+
+<script>
+  const sendBtn = document.querySelector(".ewankorin-send");
+  const nopeModal = document.getElementById("ewankorin-nope");
+  const closenope = document.getElementById("closenope");
+
+  sendBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById("ew-name");
+    const email = document.getElementById("ew-email");
+    const message = document.getElementById("ew-message");
+
+    let valid = true;
+
+    document.querySelectorAll(".error-msg").forEach(err => {
+      err.textContent = "";
+      err.classList.remove("show");
+    });
+    [name, email, message].forEach(f => f.classList.remove("error"));
+
+    if (name.value.trim() === "") {
+      showError(name, "Name is required.");
+      valid = false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email.value.trim() === "") {
+      showError(email, "Email is required.");
+      valid = false;
+    } else if (!emailRegex.test(email.value)) {
+      showError(email, "Invalid email format.");
+      valid = false;
+    }
+
+    if (message.value.trim() === "") {
+      showError(message, "Please write your message ♡");
+      valid = false;
+    }
+
+    if (valid) {
+      nopeModal.classList.add("show");
+      name.value = "";
+      email.value = "";
+      message.value = "";
+    }
+  });
+
+  closenope.addEventListener("click", () => {
+    nopeModal.classList.remove("show");
+  });
+
+  function showError(field, msg) {
+    const error = field.parentElement.querySelector(".error-msg");
+    error.textContent = msg;
+    error.classList.add("show");
+    field.classList.add("error");
+  }
+</script>
+
 
 
 <footer>
@@ -702,7 +776,7 @@ function render() {
   document.getElementById("a1").src = data[c].acc[0];
   document.getElementById("a2").src = data[c].acc[1];
   document.getElementById("a3").src = data[c].acc[2];
-  document.getElementById("text").innerHTML = `<h3>THIS IS RAIIII</h3><p>${data[c].text}</p>`;
+  document.getElementById("text").innerHTML = `<h3>Rainah Palaganas</h3><p>${data[c].text}</p>`;
 
   details.classList.add("active");
 }
