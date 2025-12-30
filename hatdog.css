@@ -478,7 +478,6 @@ body{font-family:'Space Grotesk',sans-serif;}
   font-weight: 500;
 }
 
-/* ===== SEND BUTTON ===== */
 .ewankorin-send {
   width: 100%;
   padding: 15px 0;
@@ -500,7 +499,6 @@ body{font-family:'Space Grotesk',sans-serif;}
   background: linear-gradient(135deg,#ffb3e0,#b875ff,#5cffd7);
 }
 
-/* ===== SOCIAL GRID ===== */
 .ewankorin-socials-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -1316,10 +1314,6 @@ footer {
   100% { transform: translateX(0) rotateY(0deg); }       
 }
 
-
-/* ================================
-   VIDEO MODAL
-================================ */
 .gansalpa-video-modal {
   position: fixed;
   inset: 0;
@@ -1359,10 +1353,6 @@ footer {
   width: 100%;
   display: block;
 }
-
-/* ================================
-   CLOSE BUTTON
-================================ */
 .gansalpa-close-btn {
   position: absolute;
   top: 12px;
