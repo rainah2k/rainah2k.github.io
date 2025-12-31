@@ -336,7 +336,7 @@ setTimeout(()=>{ alon(); }, 1200);
 </section>
 
 <section id="piksurq" class="reveal">
-<h2 class="ewankorin-title">This is Rainah</h2>
+<h2 class="ewankorin-title">Gallery</h2>
 
   <div class="piksurq-rotator  reveal">
 
@@ -356,45 +356,6 @@ setTimeout(()=>{ alon(); }, 1200);
 
   </div>
 </section>
-
-
-<section class="gansalpa-ewankorin-section reveal">
-<h2 class="ewankorin-title">Rainah's Husband</h2>
-  <p>U may not know but I'm already married. (Please click him, hehe.)</p>
-
-  <div class="gansalpa-gift-wrap">
-    <img src="tsukiulit.png" alt="ewankorin Gift" class="gansalpa-gift-img">
-  </div>
-</section>
-
-<div class="gansalpa-video-modal">
-  <div class="gansalpa-video-box">
-    <button class="gansalpa-close-btn">✕</button>
-    <video class="gansalpa-video" src="tsuki.mp4"></video>
-  </div>
-</div>
-
-
-<script>
-const gansalpaGift = document.querySelector('.gansalpa-gift-wrap');
-const gansalpaModal = document.querySelector('.gansalpa-video-modal');
-const gansalpaVideo = document.querySelector('.gansalpa-video');
-const gansalpaClose = document.querySelector('.gansalpa-close-btn');
-
-gansalpaGift.addEventListener('click', () => {
-  gansalpaModal.classList.add('active');
-  gansalpaVideo.currentTime = 0;
-  gansalpaVideo.play();
-});
-
-function gansalpaCloseVideo() {
-  gansalpaVideo.pause();
-  gansalpaVideo.currentTime = 0;
-  gansalpaModal.classList.remove('active');
-}
-gansalpaClose.addEventListener('click', gansalpaCloseVideo);
-gansalpaVideo.addEventListener('ended', gansalpaCloseVideo);
-</script>
 
 
 <div id="ewankorinModal" class="ewankorin-modal">
@@ -485,29 +446,8 @@ gansalpaVideo.addEventListener('ended', gansalpaCloseVideo);
 </section>
 
 <section id="contact" class=" contact-ewankorin">
-  <h2 class="ewankorin-title">Send Me Love</h2>
-
-    <div class="reveal ewankorin-contact-wrap">
-
-    <div class="reveal ewankorin-card">
-      <div class="ewankorin-field">
-        <input type="text" id="ew-name" placeholder="Your Name ♡">
-        <span class="error-msg"></span>
-      </div>
-
-      <div class="ewankorin-field">
-        <input type="email" id="ew-email" placeholder="Your Email ♡">
-        <span class="error-msg"></span>
-      </div>
-
-      <div class="ewankorin-field">
-        <textarea id="ew-message" rows="4" placeholder="Your Message ♡"></textarea>
-        <span class="error-msg"></span>
-      </div>
-
-      <button class="ewankorin-send">Send Message ♡</button>
-    </div>
   
+  <h2 class="ewankorin-title">Contact Me</h2>
     <div class="reveal ewankorin-socials-grid">
       <a href="https://www.facebook.com/yourloverai" class="ewankorin-box">
         <img src="fb.png" alt="Facebook">
@@ -537,75 +477,6 @@ gansalpaVideo.addEventListener('ended', gansalpaCloseVideo);
 
   </div>
 </section>
-
-<div id="ewankorin-nope" class="ewankorin-nope">
-  <div class="ewankorin-nope-box">
-    <h3>Message Sent</h3>
-    <p>Thank you for your message! I’ll get back to you soon ♡</p>
-    <button id="closenope">Okay ♡</button>
-  </div>
-</div>
-
-<script>
-  const sendBtn = document.querySelector(".ewankorin-send");
-  const nopeModal = document.getElementById("ewankorin-nope");
-  const closenope = document.getElementById("closenope");
-
-  sendBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    const name = document.getElementById("ew-name");
-    const email = document.getElementById("ew-email");
-    const message = document.getElementById("ew-message");
-
-    let valid = true;
-
-    document.querySelectorAll(".error-msg").forEach(err => {
-      err.textContent = "";
-      err.classList.remove("show");
-    });
-    [name, email, message].forEach(f => f.classList.remove("error"));
-
-    if (name.value.trim() === "") {
-      showError(name, "Name is required.");
-      valid = false;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (email.value.trim() === "") {
-      showError(email, "Email is required.");
-      valid = false;
-    } else if (!emailRegex.test(email.value)) {
-      showError(email, "Invalid email format.");
-      valid = false;
-    }
-
-    if (message.value.trim() === "") {
-      showError(message, "Please write your message ♡");
-      valid = false;
-    }
-
-    if (valid) {
-      nopeModal.classList.add("show");
-      name.value = "";
-      email.value = "";
-      message.value = "";
-    }
-  });
-
-  closenope.addEventListener("click", () => {
-    nopeModal.classList.remove("show");
-  });
-
-  function showError(field, msg) {
-    const error = field.parentElement.querySelector(".error-msg");
-    error.textContent = msg;
-    error.classList.add("show");
-    field.classList.add("error");
-  }
-</script>
-
-
 
 <footer>
   © 2025 Rainah Palaganas · My Portfolio
